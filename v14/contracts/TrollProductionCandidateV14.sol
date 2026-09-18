@@ -184,7 +184,7 @@ contract TrollInHoodGenesisV14 is ERC721Enumerable, ERC2981, Ownable2Step, IERC4
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Enumerable, ERC2981)
+        override(ERC721Enumerable, ERC2981, IERC165)
         returns (bool)
     {
         return interfaceId == type(IERC4906).interfaceId || super.supportsInterface(interfaceId);
@@ -353,7 +353,7 @@ interface IV14StateReader {
 
 contract TrollMetadataRouterV14 {
     using Strings for uint256;
-    string public immutable baseURI;
+    string public baseURI;
     IV14StateReader public immutable evolution;
 
     constructor(string memory baseURI_, address evolution_) {
