@@ -109,6 +109,33 @@ contract TrollInHoodGenesisV14 is ERC721Enumerable, ERC2981, Ownable2Step, IERC4
         if (freeze_) metadataRouterFrozen = true;
     }
 
+    /// @notice One-transaction production/testnet wiring helper.
+    /// @dev Preserves the same one-way freeze semantics as the individual setters.
+    function configureCore(
+        address mintController_,
+        address evolutionEngine_,
+        address metadataRouter_,
+        bool freezeAll
+    ) external onlyOwner {
+        if (mintControllerFrozen || evolutionEngineFrozen || metadataRouterFrozen) revert Frozen();
+        require(
+            mintController_ != address(0) &&
+            evolutionEngine_ != address(0) &&
+            metadataRouter_ != address(0),
+            "zero core address"
+        );
+
+        mintController = mintController_;
+        evolutionEngine = evolutionEngine_;
+        metadataRouter = metadataRouter_;
+
+        if (freezeAll) {
+            mintControllerFrozen = true;
+            evolutionEngineFrozen = true;
+            metadataRouterFrozen = true;
+        }
+    }
+
     function mintFromController(address to, uint256 quantity)
         external
         returns (uint256 firstTokenId)
@@ -405,6 +432,16 @@ contract TrollAssetRegistryV14 is Ownable2Step {
         return keccak256(abi.encode(chainId, token));
     }
 
+    struct AssetInput {
+        uint256 chainId;
+        address token;
+        uint8 decimals;
+        AssetClass assetClass;
+        Lane lane;
+        bool enabled;
+        string symbol;
+    }
+
     function registerAsset(
         uint256 chainId,
         address token,
@@ -414,6 +451,38 @@ contract TrollAssetRegistryV14 is Ownable2Step {
         bool enabled,
         string calldata symbol
     ) external onlyOwner returns (bytes32 assetKey) {
+        assetKey = _registerAsset(chainId, token, decimals, assetClass, lane, enabled, symbol);
+    }
+
+    function registerAssets(AssetInput[] calldata items)
+        external
+        onlyOwner
+        returns (bytes32[] memory keys)
+    {
+        keys = new bytes32[](items.length);
+        for (uint256 i = 0; i < items.length; ++i) {
+            AssetInput calldata a = items[i];
+            keys[i] = _registerAsset(
+                a.chainId,
+                a.token,
+                a.decimals,
+                a.assetClass,
+                a.lane,
+                a.enabled,
+                a.symbol
+            );
+        }
+    }
+
+    function _registerAsset(
+        uint256 chainId,
+        address token,
+        uint8 decimals,
+        AssetClass assetClass,
+        Lane lane,
+        bool enabled,
+        string memory symbol
+    ) internal returns (bytes32 assetKey) {
         require(chainId != 0, "zero chain");
         require(token != address(0), "zero token");
         require(bytes(symbol).length > 0, "empty symbol");
