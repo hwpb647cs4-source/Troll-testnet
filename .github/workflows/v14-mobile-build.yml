@@ -1,0 +1,56 @@
+name: TROLL V14 Mobile Artifact Build
+
+on:
+  push:
+    branches: ["v14-mobile-testnet"]
+    paths:
+      - "v14/contracts/**"
+      - "v14/test/**"
+      - "v14/package.json"
+      - "v14/hardhat.config.cjs"
+      - "v14/scripts-static-check.cjs"
+      - "v14/scripts-export-mobile.cjs"
+      - ".github/workflows/v14-mobile-build.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-mobile-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: v14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v14-mobile-testnet
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: v14/package.json
+      - name: Install pinned dependencies
+        run: npm install --no-audit --no-fund
+      - name: Static invariants
+        run: npm run validate:static
+      - name: Compile Solidity 0.8.24
+        run: npm run compile
+      - name: Run V14 tests
+        run: npm test
+      - name: Export browser deployment artifacts
+        run: node scripts-export-mobile.cjs
+      - name: Commit compiled browser artifact
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add v14/mobile/compiled.json
+          if git diff --cached --quiet; then
+            echo "No artifact changes"
+          else
+            git commit -m "Build V14 mobile compiled artifacts [skip ci]"
+            git push origin HEAD:v14-mobile-testnet
+          fi
