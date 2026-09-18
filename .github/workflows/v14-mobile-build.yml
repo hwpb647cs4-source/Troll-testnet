@@ -54,5 +54,7 @@ jobs:
             echo "No artifact changes"
           else
             git commit -m "Build V14 mobile compiled artifacts [skip ci]"
+            git fetch origin v14-mobile-testnet
+            git rebase origin/v14-mobile-testnet
             git push origin HEAD:v14-mobile-testnet
           fi
