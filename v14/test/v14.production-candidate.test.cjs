@@ -53,7 +53,7 @@ describe("TROLL NFT 2.0 V14 production-candidate", function () {
     const silver = await deploy("MockAssetV14", "Test Silver", "tSILVER", 18);
     const stock = await deploy("MockAssetV14", "Test NVIDIA", "tNVDA", 18);
 
-    const nft = await deploy("TrollInHoodGenesisV14", walletA.address, 500);
+    const nft = await deploy("TrollInHoodGenesisV14", walletA.address, walletA.address, 500);
     const evolution = await deploy(
       "TrollEvolutionEngineV14",
       await troll.getAddress(),
@@ -66,9 +66,10 @@ describe("TROLL NFT 2.0 V14 production-candidate", function () {
       "ipfs://troll-v13/",
       await evolution.getAddress()
     );
-    const registry = await deploy("TrollAssetRegistryV14");
+    const registry = await deploy("TrollAssetRegistryV14", walletA.address);
     const router = await deploy(
       "TrollRewardRouterV14",
+      walletA.address,
       await factory.getAddress(),
       await registry.getAddress()
     );
@@ -78,7 +79,7 @@ describe("TROLL NFT 2.0 V14 production-candidate", function () {
       await evolution.getAddress(),
       await factory.getAddress()
     );
-    const snapshots = await deploy("TrollAssetSnapshotAnchorV14");
+    const snapshots = await deploy("TrollAssetSnapshotAnchorV14", walletA.address);
 
     await (await nft.setMintController(walletA.address, true)).wait();
     await (await nft.setEvolutionEngine(await evolution.getAddress(), true)).wait();
