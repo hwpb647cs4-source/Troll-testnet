@@ -3,6 +3,8 @@ name: TROLL V14 Mobile Artifact Build
 on:
   push:
     branches: ["v14-mobile-testnet"]
+  pull_request:
+    branches: ["main"]
     paths:
       - "v14/contracts/**"
       - "v14/test/**"
