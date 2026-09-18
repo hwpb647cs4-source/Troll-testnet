@@ -79,10 +79,11 @@ contract TrollInHoodGenesisV14 is ERC721Enumerable, ERC2981, Ownable2Step, IERC4
     error Frozen();
     error InvalidFamilyProof();
 
-    constructor(address royaltyReceiver, uint96 royaltyBps)
+    constructor(address initialOwner, address royaltyReceiver, uint96 royaltyBps)
         ERC721("TROLL NFT 2.0 Genesis", "TROLLG")
-        Ownable(msg.sender)
+        Ownable(initialOwner)
     {
+        require(initialOwner != address(0), "zero owner");
         require(royaltyReceiver != address(0), "zero royalty receiver");
         require(royaltyBps <= 1_000, "royalty too high");
         _setDefaultRoyalty(royaltyReceiver, royaltyBps);
@@ -107,6 +108,33 @@ contract TrollInHoodGenesisV14 is ERC721Enumerable, ERC2981, Ownable2Step, IERC4
         require(a != address(0), "zero router");
         metadataRouter = a;
         if (freeze_) metadataRouterFrozen = true;
+    }
+
+    /// @notice One-transaction production/testnet wiring helper.
+    /// @dev Preserves the same one-way freeze semantics as the individual setters.
+    function configureCore(
+        address mintController_,
+        address evolutionEngine_,
+        address metadataRouter_,
+        bool freezeAll
+    ) external onlyOwner {
+        if (mintControllerFrozen || evolutionEngineFrozen || metadataRouterFrozen) revert Frozen();
+        require(
+            mintController_ != address(0) &&
+            evolutionEngine_ != address(0) &&
+            metadataRouter_ != address(0),
+            "zero core address"
+        );
+
+        mintController = mintController_;
+        evolutionEngine = evolutionEngine_;
+        metadataRouter = metadataRouter_;
+
+        if (freezeAll) {
+            mintControllerFrozen = true;
+            evolutionEngineFrozen = true;
+            metadataRouterFrozen = true;
+        }
     }
 
     function mintFromController(address to, uint256 quantity)
@@ -399,10 +427,22 @@ contract TrollAssetRegistryV14 is Ownable2Step {
         string symbol
     );
 
-    constructor() Ownable(msg.sender) {}
+    constructor(address initialOwner) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
+    }
 
     function keyFor(uint256 chainId, address token) public pure returns (bytes32) {
         return keccak256(abi.encode(chainId, token));
+    }
+
+    struct AssetInput {
+        uint256 chainId;
+        address token;
+        uint8 decimals;
+        AssetClass assetClass;
+        Lane lane;
+        bool enabled;
+        string symbol;
     }
 
     function registerAsset(
@@ -414,6 +454,38 @@ contract TrollAssetRegistryV14 is Ownable2Step {
         bool enabled,
         string calldata symbol
     ) external onlyOwner returns (bytes32 assetKey) {
+        assetKey = _registerAsset(chainId, token, decimals, assetClass, lane, enabled, symbol);
+    }
+
+    function registerAssets(AssetInput[] calldata items)
+        external
+        onlyOwner
+        returns (bytes32[] memory keys)
+    {
+        keys = new bytes32[](items.length);
+        for (uint256 i = 0; i < items.length; ++i) {
+            AssetInput calldata a = items[i];
+            keys[i] = _registerAsset(
+                a.chainId,
+                a.token,
+                a.decimals,
+                a.assetClass,
+                a.lane,
+                a.enabled,
+                a.symbol
+            );
+        }
+    }
+
+    function _registerAsset(
+        uint256 chainId,
+        address token,
+        uint8 decimals,
+        AssetClass assetClass,
+        Lane lane,
+        bool enabled,
+        string memory symbol
+    ) internal returns (bytes32 assetKey) {
         require(chainId != 0, "zero chain");
         require(token != address(0), "zero token");
         require(bytes(symbol).length > 0, "empty symbol");
@@ -473,7 +545,8 @@ contract TrollRewardRouterV14 is Ownable2Step, ReentrancyGuard {
         bytes32 manifestHash
     );
 
-    constructor(address vaultFactory_, address registry_) Ownable(msg.sender) {
+    constructor(address initialOwner, address vaultFactory_, address registry_) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
         require(vaultFactory_ != address(0) && registry_ != address(0), "zero");
         vaultFactory = IV14VaultFactory(vaultFactory_);
         registry = IV14AssetRegistry(registry_);
@@ -599,7 +672,9 @@ contract TrollAssetSnapshotAnchorV14 is Ownable2Step {
         uint64 blockNumber
     );
 
-    constructor() Ownable(msg.sender) {}
+    constructor(address initialOwner) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
+    }
 
     function publish(uint256 tokenId, bytes32 manifestHash, uint64 blockNumber)
         external

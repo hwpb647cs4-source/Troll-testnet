@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>TROLL NFT 2.0 — V14 Full Testnet</title>
+<style>
+:root{--bg:#040806;--p:#0a1510;--line:#244638;--g:#63ff72;--m:#9aafa2;--w:#f1fff5;--b:#7cc4ff;--bad:#ff7e7e;--gold:#ffd56a}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% -10%,#173d2b,#040806 48%);color:var(--w);font-family:system-ui,-apple-system,sans-serif}
+.w{max-width:900px;margin:auto;padding:14px}
+.p{background:linear-gradient(180deg,#0b1912,#07100c);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:12px}
+h1{margin:0;font-size:31px}h1 b{color:var(--g)}h2{font-size:19px;margin:0 0 10px}
+.sub{color:#bfd3c6;line-height:1.5;font-size:13px}.tag{display:inline-block;border:1px solid #467258;border-radius:999px;padding:5px 9px;font-size:10px;color:#c6ffd0;margin-bottom:8px}
+button,input{font:inherit}button{width:100%;padding:13px;border:0;border-radius:12px;background:var(--g);color:#051d09;font-weight:900;margin:5px 0}
+button.secondary{background:#173026;color:#e6ffec;border:1px solid #315846}
+button:disabled{opacity:.35}
+input{width:100%;padding:12px;border-radius:10px;background:#05100b;color:white;border:1px solid #315846}
+.s{padding:10px;border:1px solid #234235;border-radius:10px;background:#06110c;font-size:12px;word-break:break-word}
+.ok{color:#baffc4}.bad{color:var(--bad)}.warn{color:#ffdfa0}
+.r{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #173126;font-size:12px}
+.r span{color:var(--m)}.r b{text-align:right;word-break:break-all}
+.log{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;max-height:390px;overflow:auto}
+a{color:var(--b)}.progress{height:10px;background:#07110d;border:1px solid #294a3b;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:var(--g)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.check{font-size:12px;padding:5px 0}.big{font-size:21px;font-weight:900}.gold{color:var(--gold)}
+</style>
+</head>
+<body><div class="w">
+<section class="p">
+<div class="tag">V14 FULL PRODUCTION-CANDIDATE • ROBINHOOD TESTNET</div>
+<h1>TROLL NFT 2.0 <b>V14</b></h1>
+<div class="sub">Full testnet path: frozen 5,000 Genesis identity → TROLL burn evolution → passive vault → USDC-style stable + gold + silver accumulation → regulated stock entitlement → A→B persistence proof.</div>
+</section>
+
+<section class="p">
+<h2>1. Wallet + Receiver</h2>
+<button id="connect">Connect Wallet A</button>
+<button id="switch" class="secondary">Add / Switch Robinhood Testnet</button>
+<div id="wallet" class="s">Open this page inside an injected EVM wallet browser.</div>
+<div style="height:8px"></div>
+<label class="sub">Wallet B public address</label>
+<input id="receiver" placeholder="0x..."/>
+<div class="sub" style="margin-top:8px">Use testnet-only accounts. Never paste a private key or seed phrase.</div>
+</section>
+
+<section class="p">
+<h2>2. Load V14 Build</h2>
+<button id="load">Load CI-Compiled V14 Artifacts</button>
+<div id="build" class="s">Not loaded.</div>
+</section>
+
+<section class="p">
+<h2>3. Deploy Full V14 Stack</h2>
+<div class="progress"><div id="deployBar" class="bar"></div></div>
+<button id="deployBatcher" disabled>Deploy V14 Batch Deployer</button>
+<button id="deployStack" disabled>Deploy Full V14 Contracts</button>
+<div id="deployState" class="s">Waiting.</div>
+</section>
+
+<section class="p">
+<h2>4. Run Full V14 Proof</h2>
+<div class="sub">This is resumable. If the wallet/browser interrupts the flow, reopen the page, reconnect Wallet A, load the build, and press this button again. Completed steps are checked on-chain and skipped.</div>
+<button id="run" disabled>Run / Resume Full V14 Testnet Proof</button>
+<div id="runState" class="s">Not started.</div>
+</section>
+
+<section class="p">
+<h2>Live V14 Passport</h2>
+<div id="passport">
+<div class="r"><span>Token</span><b>#0001</b></div>
+<div class="r"><span>Family</span><b>—</b></div>
+<div class="r"><span>TROLL burned</span><b>—</b></div>
+<div class="r"><span>Evolution</span><b>—</b></div>
+<div class="r"><span>Reward weight</span><b>—</b></div>
+<div class="r"><span>Bound vault</span><b>—</b></div>
+<div class="r"><span>Vault tUSD</span><b>—</b></div>
+<div class="r"><span>Vault tGOLD</span><b>—</b></div>
+<div class="r"><span>Vault tSILVER</span><b>—</b></div>
+<div class="r"><span>tNVDA entitlement</span><b>—</b></div>
+<div class="r"><span>Owner</span><b>—</b></div>
+</div>
+</section>
+
+<section class="p">
+<h2>Acceptance</h2>
+<div id="checks" class="sub">Waiting for proof.</div>
+</section>
+
+<section class="p">
+<h2>Transaction Log</h2>
+<div id="log" class="log">Ready.</div>
+</section>
+</div>
+
+<script type="module">
+import { ethers } from "https://esm.sh/ethers@6.13.4";
+
+const CHAIN_ID=46630;
+const CHAIN_HEX="0xb626";
+const RPC="https://rpc.testnet.chain.robinhood.com";
+const EXPLORER="https://explorer.testnet.chain.robinhood.com";
+const DEAD="0x000000000000000000000000000000000000dEaD";
+const GENESIS_SHA="0x7658b0b924dfa9578a7172798a94ac8f799993ff9f9045fed13022a360adcdbe";
+const FAMILY_ROOT="0x6f1c3a173b47ed7551c72dacbe1a5b69ef2e08dce33c1d8e78eaa627bf76d1a3";
+const PROOF=[
+"0x16cc16068311df73a29f26ad57d131874a4c223eccc4fddc8e298d567f3eb135",
+"0x6d700807fe5169f2fa6a53449d0c5887db17d5192a84260aae6a7937bbd5f87d",
+"0x04d70c457d284f1c6469376a395a4a470aa2281e665ab4fdfdfcfc754b2a9c14",
+"0x5ce57088c6e70b6b5b776e655b88f5a001b2c6e6d809253cec8a565ea06c7aa4",
+"0xec99e8153a32d8104542ffe6043c25685c45d1ef45587dc484dd40468a650394",
+"0xf2fc372a26ec40365e83345fd95aee1bafa739cfb4a607b2e25118a6d4261dbe",
+"0x1278965eb71ae8e9f46ac01bfc181474882506b76ed05edf551d7d5ef5b404db",
+"0xf4915fd4e57205e68b015ebd56f2f0f55e59018ef9a1e32b1a2a76d2e5912d2d",
+"0xec2541fcf0a552a75e77673ce0e53244c2cfcb8a5d6021006523df3fb48f0f82",
+"0x40ebd048a3c6cb7d92297f93471bfbe5572263b2fbdf4199225a461b889758c5",
+"0x0a911de1c9dd3ae2894c6b0fc78fb28824bb5cd744f12194e50265e08f5abf35",
+"0x339303b0efed56ea2a34c0cd7fe7860c66525f329a94fe01d17d7ff7f516196e",
+"0xaf7241106b7c3008bfe447e02f1888b12c04d7b8283d7dd3cb02d7881b1224b1"
+];
+
+const $=id=>document.getElementById(id);
+let provider=null, signer=null, account=null, build=null;
+let batcher=null, addresses=null;
+
+function log(s){
+  $("log").textContent += "\n"+s;
+  $("log").scrollTop=$("log").scrollHeight;
+}
+function txUrl(h){return EXPLORER+"/tx/"+h}
+function addrUrl(a){return EXPLORER+"/address/"+a}
+function short(a){return a ? a.slice(0,8)+"…"+a.slice(-6) : "—"}
+function stateName(n){return ["GENESIS","AWAKENED","CHARGED","RELIC","ASCENDED","LEGENDARY","OMEGA"][Number(n)]||String(n)}
+function save(){
+  if(!account)return;
+  localStorage.setItem("troll-v14-"+account.toLowerCase(),JSON.stringify({
+    batcher:batcher,addresses:addresses,receiver:$("receiver").value.trim()
+  }));
+}
+function restore(){
+  if(!account)return;
+  const raw=localStorage.getItem("troll-v14-"+account.toLowerCase());
+  if(!raw)return;
+  try{
+    const x=JSON.parse(raw);
+    batcher=x.batcher||batcher;
+    addresses=x.addresses||addresses;
+    if(x.receiver&&!$("receiver").value)$("receiver").value=x.receiver;
+  }catch{}
+}
+async function injected(){
+  if(!window.ethereum) throw new Error("No injected EVM wallet. Open this page inside your wallet browser.");
+  return window.ethereum;
+}
+async function connect(){
+  const eth=await injected();
+  await eth.request({method:"eth_requestAccounts"});
+  provider=new ethers.BrowserProvider(eth);
+  signer=await provider.getSigner();
+  account=await signer.getAddress();
+  const net=await provider.getNetwork();
+  $("wallet").innerHTML="<b>"+account+"</b><br>Chain ID: "+net.chainId;
+  restore();
+  updateButtons();
+  log("Wallet A connected: "+account);
+}
+async function switchChain(){
+  const eth=await injected();
+  try{
+    await eth.request({method:"wallet_switchEthereumChain",params:[{chainId:CHAIN_HEX}]});
+  }catch(e){
+    if(e.code===4902||e.code===-32603){
+      await eth.request({method:"wallet_addEthereumChain",params:[{
+        chainId:CHAIN_HEX,
+        chainName:"Robinhood Chain Testnet",
+        nativeCurrency:{name:"Ether",symbol:"ETH",decimals:18},
+        rpcUrls:[RPC],
+        blockExplorerUrls:[EXPLORER]
+      }]});
+    }else throw e;
+  }
+  await connect();
+}
+async function requireChain(){
+  if(!provider)await connect();
+  const net=await provider.getNetwork();
+  if(Number(net.chainId)!==CHAIN_ID)throw new Error("Switch to Robinhood Chain Testnet first.");
+}
+function artifact(name){
+  const a=build&&build.contracts&&build.contracts[name];
+  if(!a)throw new Error("Missing artifact "+name);
+  return a;
+}
+async function loadBuild(){
+  const r=await fetch("./compiled.json?ts="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error("compiled.json not published yet");
+  build=await r.json();
+  const count=Object.keys(build.contracts||{}).length;
+  if(count<11)throw new Error("Incomplete build artifact");
+  $("build").textContent="PASS — CI build "+build.version+" • "+count+" contracts • Solidity "+build.solc;
+  $("build").className="s ok";
+  updateButtons();
+  log("Loaded CI-compiled V14 artifacts.");
+}
+function factory(name){
+  const a=artifact(name);
+  return new ethers.ContractFactory(a.abi,a.bytecode,signer);
+}
+async function initCode(name,args){
+  const tx=await factory(name).getDeployTransaction(...args);
+  return tx.data;
+}
+function salt(name){return ethers.keccak256(ethers.toUtf8Bytes("TROLL-V14-"+name))}
+function create2(deployer,saltHex,code){
+  return ethers.getCreate2Address(deployer,saltHex,ethers.keccak256(code));
+}
+async function waitTx(label,tx){
+  log("SIGN: "+label);
+  const r=await tx.wait();
+  log("✓ "+label+"\n"+txUrl(r.hash));
+  return r;
+}
+function updateButtons(){
+  $("deployBatcher").disabled=!(account&&build)||!!batcher;
+  $("deployStack").disabled=!(account&&build&&batcher);
+  $("run").disabled=!(account&&build&&batcher&&addresses);
+}
+async function deployBatcher(){
+  await requireChain();
+  const f=factory("TrollBatchCreate2V14");
+  log("SIGN: Deploy V14 batch deployer");
+  const c=await f.deploy();
+  const receipt=await c.deploymentTransaction().wait();
+  batcher=await c.getAddress();
+  save();
+  $("deployState").innerHTML="Batch deployer: <a target='_blank' href='"+addrUrl(batcher)+"'>"+batcher+"</a>";
+  $("deployBar").style.width="20%";
+  log("✓ Batcher "+batcher+"\n"+txUrl(receipt.hash));
+  updateButtons();
+}
+async function codeExists(a){return (await provider.getCode(a))!=="0x"}
+async function prepareAddresses(){
+  if(!batcher)throw new Error("Deploy batcher first.");
+
+  const defs={};
+  const add=async(name,contract,args)=>{
+    const code=await initCode(contract,args);
+    const s=salt(name);
+    const a=create2(batcher,s,code);
+    defs[name]={contract:contract,args:args,code:code,salt:s,address:a};
+    return a;
+  };
+
+  const tTROLL=await add("tTROLL","MockAssetV14",["Test TROLL","tTROLL",18]);
+  const tUSD=await add("tUSD","MockAssetV14",["Test USD","tUSD",6]);
+  const tGOLD=await add("tGOLD","MockAssetV14",["Test Gold","tGOLD",18]);
+  const tSILVER=await add("tSILVER","MockAssetV14",["Test Silver","tSILVER",18]);
+  const tNVDA=await add("tNVDA","MockAssetV14",["Test NVIDIA","tNVDA",18]);
+  const helper=await add("helper","TrollTestnetFundingHelperV14",[]);
+  const nft=await add("nft","TrollInHoodGenesisV14",[account,account,500]);
+  const registry=await add("registry","TrollAssetRegistryV14",[account]);
+  const snapshot=await add("snapshot","TrollAssetSnapshotAnchorV14",[account]);
+
+  const evolution=await add("evolution","TrollEvolutionEngineV14",[tTROLL,nft,DEAD]);
+  const vaultFactory=await add("vaultFactory","TrollBoundVaultFactoryV14",[nft]);
+  const metadata=await add("metadata","TrollMetadataRouterV14",["ipfs://troll-v13/",evolution]);
+  const router=await add("router","TrollRewardRouterV14",[account,vaultFactory,registry]);
+  const lens=await add("lens","TrollLensV14",[nft,evolution,vaultFactory]);
+
+  addresses={tTROLL,tUSD,tGOLD,tSILVER,tNVDA,helper,nft,registry,snapshot,evolution,vaultFactory,metadata,router,lens,_defs:defs};
+  save();
+  return addresses;
+}
+async function deployGroup(names,label){
+  const c=new ethers.Contract(batcher,artifact("TrollBatchCreate2V14").abi,signer);
+  const pending=[];
+  for(const n of names){
+    const d=addresses._defs[n];
+    if(!(await codeExists(d.address)))pending.push(d);
+  }
+  if(!pending.length){log("SKIP "+label+" — already deployed");return;}
+  await waitTx(label,await c.deployMany(pending.map(x=>x.code),pending.map(x=>x.salt)));
+}
+async function deployStack(){
+  await requireChain();
+  if(!addresses)await prepareAddresses();
+  $("deployState").textContent="Deploying V14 contracts…";
+
+  await deployGroup(["tTROLL","tUSD","tGOLD","tSILVER","tNVDA","helper"],"Deploy mock asset bundle + funding helper");
+  $("deployBar").style.width="45%";
+  await deployGroup(["nft","registry","snapshot"],"Deploy Genesis NFT + asset registry + snapshot anchor");
+  $("deployBar").style.width="65%";
+  await deployGroup(["evolution","vaultFactory","metadata"],"Deploy evolution + passive vault factory + metadata router");
+  $("deployBar").style.width="82%";
+  await deployGroup(["router","lens"],"Deploy reward router + read-only lens");
+  $("deployBar").style.width="100%";
+
+  for(const [k,a] of Object.entries(addresses)){
+    if(k==="_defs")continue;
+    if(!(await codeExists(a)))throw new Error(k+" did not deploy");
+  }
+  save();
+  $("deployState").innerHTML="<span class='ok'>PASS — Full V14 stack deployed.</span><br>NFT: <a target='_blank' href='"+addrUrl(addresses.nft)+"'>"+addresses.nft+"</a>";
+  updateButtons();
+  log("FULL STACK DEPLOYED.");
+}
+function contract(name,addressKey){
+  return new ethers.Contract(addresses[addressKey||name],artifact(name).abi,signer);
+}
+async function runProof(){
+  await requireChain();
+  const receiver=$("receiver").value.trim();
+  if(!ethers.isAddress(receiver))throw new Error("Enter Wallet B public address.");
+  if(receiver.toLowerCase()===account.toLowerCase())throw new Error("Wallet B must be different.");
+  save();
+  $("run").disabled=true;
+  try{
+    const nft=contract("TrollInHoodGenesisV14","nft");
+    const evo=contract("TrollEvolutionEngineV14","evolution");
+    const vf=contract("TrollBoundVaultFactoryV14","vaultFactory");
+    const registry=contract("TrollAssetRegistryV14","registry");
+    const router=contract("TrollRewardRouterV14","router");
+    const lens=contract("TrollLensV14","lens");
+    const snapshot=contract("TrollAssetSnapshotAnchorV14","snapshot");
+    const helper=contract("TrollTestnetFundingHelperV14","helper");
+    const troll=contract("MockAssetV14","tTROLL");
+    const usd=contract("MockAssetV14","tUSD");
+    const gold=contract("MockAssetV14","tGOLD");
+    const silver=contract("MockAssetV14","tSILVER");
+
+    if(!(await nft.mintControllerFrozen())){
+      await waitTx("Freeze V14 core wiring",await nft.configureCore(account,addresses.evolution,addresses.metadata,true));
+    }else log("SKIP core wiring — already frozen");
+
+    const keyTROLL=await registry.keyFor(CHAIN_ID,addresses.tTROLL);
+    const keyUSD=await registry.keyFor(CHAIN_ID,addresses.tUSD);
+    const keyGOLD=await registry.keyFor(CHAIN_ID,addresses.tGOLD);
+    const keySILVER=await registry.keyFor(CHAIN_ID,addresses.tSILVER);
+    const keyNVDA=await registry.keyFor(CHAIN_ID,addresses.tNVDA);
+    const cur=await registry.asset(keyUSD);
+    if(!cur.enabled){
+      const items=[
+        [CHAIN_ID,addresses.tTROLL,18,0,0,true,"tTROLL"],
+        [CHAIN_ID,addresses.tUSD,6,1,0,true,"tUSD"],
+        [CHAIN_ID,addresses.tGOLD,18,2,0,true,"tGOLD"],
+        [CHAIN_ID,addresses.tSILVER,18,3,0,true,"tSILVER"],
+        [CHAIN_ID,addresses.tNVDA,18,4,1,true,"tNVDA"]
+      ];
+      await waitTx("Register exact-chain asset lanes",await registry.registerAssets(items));
+    }else log("SKIP asset registry — already configured");
+
+    let supply=await nft.totalSupply();
+    if(supply===0n)await waitTx("Mint TROLL Genesis #0001",await nft.mintFromController(account,1));
+    else log("SKIP mint — token #1 exists");
+
+    if(!(await nft.familyRevealed(1)))await waitTx("Reveal frozen NVIDIA family proof",await nft.revealFamily(1,5,PROOF));
+    else log("SKIP family reveal — already revealed");
+
+    let vault=await vf.vaultOf(1);
+    if(vault===ethers.ZeroAddress){
+      await waitTx("Create deterministic passive bound vault",await vf.createVault(1));
+      vault=await vf.vaultOf(1);
+    }else log("SKIP vault creation — already exists");
+
+    let burned=await evo.burnedByTokenId(1);
+    const targetBurn=ethers.parseEther("175000");
+    if(burned<targetBurn){
+      const need=targetBurn-burned;
+      const bal=await troll.balanceOf(account);
+      if(bal<need)await waitTx("Faucet missing test TROLL",await troll.faucet(account,need-bal));
+      const allowance=await troll.allowance(account,addresses.evolution);
+      if(allowance<need)await waitTx("Approve TROLL evolution engine",await troll.approve(addresses.evolution,ethers.MaxUint256));
+      await waitTx("Burn to ASCENDED",await evo.evolve(1,need));
+    }else log("SKIP evolution — 175K already credited");
+
+    const desired=[ethers.parseUnits("1000",6),ethers.parseEther("0.10"),ethers.parseEther("2.50")];
+    const tokens=[addresses.tUSD,addresses.tGOLD,addresses.tSILVER];
+    const keys=[keyUSD,keyGOLD,keySILVER];
+    const bals=[await usd.balanceOf(vault),await gold.balanceOf(vault),await silver.balanceOf(vault)];
+    const missing=desired.map((x,i)=>x>bals[i]?x-bals[i]:0n);
+    if(missing.some(x=>x>0n)){
+      const t=[],k=[],a=[];
+      for(let i=0;i<3;i++)if(missing[i]>0n){t.push(tokens[i]);k.push(keys[i]);a.push(missing[i]);}
+      await waitTx("Accumulate tUSD + tGOLD + tSILVER in protected vault",await helper.fundDirectBatch(addresses.router,1,t,k,a));
+    }else log("SKIP direct rewards — vault already funded");
+
+    let blocked=false;
+    try{
+      await router.depositDirect.staticCall(1,keyNVDA,1);
+    }catch{blocked=true;}
+    if(!blocked)throw new Error("STOCK direct-lane gate did not fail closed");
+
+    const stockTarget=ethers.parseEther("5");
+    let ent=await router.entitlementAmount(1,keyNVDA);
+    const entHash=ethers.keccak256(ethers.toUtf8Bytes("TROLL-V14-NVDA-ENTITLEMENT-1"));
+    if(ent<stockTarget){
+      await waitTx("Record regulated tNVDA token-ID entitlement",await router.recordRegulatedEntitlement(1,keyNVDA,stockTarget-ent,entHash));
+    }else log("SKIP tNVDA entitlement — already recorded");
+
+    const snapHash=ethers.keccak256(ethers.toUtf8Bytes("TROLL-V14-ASSET-SNAPSHOT-1"));
+    const snap=await snapshot.latest(1);
+    if(snap.manifestHash.toLowerCase()!==snapHash.toLowerCase()){
+      const bn=await provider.getBlockNumber();
+      await waitTx("Anchor asset snapshot provenance",await snapshot.publish(1,snapHash,bn));
+    }else log("SKIP snapshot — already anchored");
+
+    let owner=await nft.ownerOf(1);
+    if(owner.toLowerCase()===account.toLowerCase()){
+      await waitTx("Transfer Genesis #0001 A → B",await nft.transferFrom(account,receiver,1));
+    }else if(owner.toLowerCase()===receiver.toLowerCase()){
+      log("SKIP transfer — Wallet B already owns #0001");
+    }else throw new Error("Token #1 owner is neither Wallet A nor Wallet B");
+
+    await verify(receiver,keyNVDA,snapHash);
+  } finally {
+    $("run").disabled=false;
+  }
+}
+async function verify(receiver,keyNVDA,snapHash){
+  const nft=contract("TrollInHoodGenesisV14","nft");
+  const lens=contract("TrollLensV14","lens");
+  const router=contract("TrollRewardRouterV14","router");
+  const snapshot=contract("TrollAssetSnapshotAnchorV14","snapshot");
+  const usd=contract("MockAssetV14","tUSD");
+  const gold=contract("MockAssetV14","tGOLD");
+  const silver=contract("MockAssetV14","tSILVER");
+
+  const p=await lens.passport(1);
+  const [minted,totalBurn]=await lens.collectionStats();
+  const u=await usd.balanceOf(p.boundVault);
+  const g=await gold.balanceOf(p.boundVault);
+  const s=await silver.balanceOf(p.boundVault);
+  const ent=await router.entitlementAmount(1,keyNVDA);
+  const snap=await snapshot.latest(1);
+  const uri=await nft.tokenURI(1);
+
+  const checks={
+    genesisSupplyCap:(await nft.maxSupply())===5000n,
+    frozenGenesisHash:(await nft.genesisManifestSHA256()).toLowerCase()===GENESIS_SHA,
+    frozenFamilyRoot:(await nft.familyMerkleRoot()).toLowerCase()===FAMILY_ROOT,
+    familyNVIDIA:p.familyRevealed&&p.family===5n,
+    burn175k:p.trollBurned===ethers.parseEther("175000"),
+    ascended:Number(p.evolutionState)===4,
+    weight2x:p.rewardWeightBps===20000n,
+    vaultPresent:p.boundVault!==ethers.ZeroAddress,
+    usd1000:u===ethers.parseUnits("1000",6),
+    goldPoint10:g===ethers.parseEther("0.10"),
+    silver2Point5:s===ethers.parseEther("2.50"),
+    nvdaEntitlement5:ent===ethers.parseEther("5"),
+    ownerMoved:p.owner.toLowerCase()===receiver.toLowerCase(),
+    collectionMintedOne:minted===1n,
+    collectionBurn175k:totalBurn===ethers.parseEther("175000"),
+    metadataAscended:uri==="ipfs://troll-v13/1/4.json",
+    snapshotAnchored:snap.manifestHash.toLowerCase()===snapHash.toLowerCase()
+  };
+  const pass=Object.values(checks).every(Boolean);
+
+  $("passport").innerHTML=
+    "<div class='r'><span>Token</span><b>#0001</b></div>"+
+    "<div class='r'><span>Family</span><b>NVIDIA (#5)</b></div>"+
+    "<div class='r'><span>TROLL burned</span><b>"+ethers.formatEther(p.trollBurned)+" tTROLL</b></div>"+
+    "<div class='r'><span>Evolution</span><b>"+stateName(p.evolutionState)+"</b></div>"+
+    "<div class='r'><span>Reward weight</span><b>"+(Number(p.rewardWeightBps)/10000).toFixed(2)+"×</b></div>"+
+    "<div class='r'><span>Bound vault</span><b><a target='_blank' href='"+addrUrl(p.boundVault)+"'>"+p.boundVault+"</a></b></div>"+
+    "<div class='r'><span>Vault tUSD</span><b>"+ethers.formatUnits(u,6)+"</b></div>"+
+    "<div class='r'><span>Vault tGOLD</span><b>"+ethers.formatEther(g)+"</b></div>"+
+    "<div class='r'><span>Vault tSILVER</span><b>"+ethers.formatEther(s)+"</b></div>"+
+    "<div class='r'><span>tNVDA entitlement</span><b>"+ethers.formatEther(ent)+"</b></div>"+
+    "<div class='r'><span>Owner</span><b>"+p.owner+"</b></div>";
+
+  $("checks").innerHTML=Object.entries(checks).map(x=>
+    "<div class='check "+(x[1]?"ok":"bad")+"'>"+(x[1]?"✅ ":"❌ ")+x[0]+"</div>"
+  ).join("");
+
+  $("runState").innerHTML=pass
+    ? "<span class='big ok'>PASS — FULL V14 TESTNET PROOF COMPLETE ✅</span>"
+    : "<span class='big bad'>FAIL — CHECK ACCEPTANCE GATES</span>";
+
+  log("\n====================================");
+  log(pass?"FULL V14 TESTNET PROOF: PASS ✅":"FULL V14 TESTNET PROOF: FAIL ❌");
+  Object.entries(checks).forEach(x=>log((x[1]?"✅ ":"❌ ")+x[0]));
+  log("====================================");
+}
+async function safe(fn,label){
+  try{await fn()}catch(e){log("ERROR "+label+": "+(e.shortMessage||e.message||e));console.error(e);}
+}
+$("connect").onclick=()=>safe(connect,"connect");
+$("switch").onclick=()=>safe(switchChain,"switch");
+$("load").onclick=()=>safe(loadBuild,"load");
+$("deployBatcher").onclick=()=>safe(deployBatcher,"batcher deploy");
+$("deployStack").onclick=()=>safe(deployStack,"stack deploy");
+$("run").onclick=()=>safe(runProof,"V14 proof");
+$("receiver").addEventListener("change",save);
+</script>
+</body>
+</html>
