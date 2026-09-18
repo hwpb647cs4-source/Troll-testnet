@@ -79,10 +79,11 @@ contract TrollInHoodGenesisV14 is ERC721Enumerable, ERC2981, Ownable2Step, IERC4
     error Frozen();
     error InvalidFamilyProof();
 
-    constructor(address royaltyReceiver, uint96 royaltyBps)
+    constructor(address initialOwner, address royaltyReceiver, uint96 royaltyBps)
         ERC721("TROLL NFT 2.0 Genesis", "TROLLG")
-        Ownable(msg.sender)
+        Ownable(initialOwner)
     {
+        require(initialOwner != address(0), "zero owner");
         require(royaltyReceiver != address(0), "zero royalty receiver");
         require(royaltyBps <= 1_000, "royalty too high");
         _setDefaultRoyalty(royaltyReceiver, royaltyBps);
@@ -426,7 +427,9 @@ contract TrollAssetRegistryV14 is Ownable2Step {
         string symbol
     );
 
-    constructor() Ownable(msg.sender) {}
+    constructor(address initialOwner) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
+    }
 
     function keyFor(uint256 chainId, address token) public pure returns (bytes32) {
         return keccak256(abi.encode(chainId, token));
@@ -542,7 +545,8 @@ contract TrollRewardRouterV14 is Ownable2Step, ReentrancyGuard {
         bytes32 manifestHash
     );
 
-    constructor(address vaultFactory_, address registry_) Ownable(msg.sender) {
+    constructor(address initialOwner, address vaultFactory_, address registry_) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
         require(vaultFactory_ != address(0) && registry_ != address(0), "zero");
         vaultFactory = IV14VaultFactory(vaultFactory_);
         registry = IV14AssetRegistry(registry_);
@@ -668,7 +672,9 @@ contract TrollAssetSnapshotAnchorV14 is Ownable2Step {
         uint64 blockNumber
     );
 
-    constructor() Ownable(msg.sender) {}
+    constructor(address initialOwner) Ownable(initialOwner) {
+        require(initialOwner != address(0), "zero owner");
+    }
 
     function publish(uint256 tokenId, bytes32 manifestHash, uint64 blockNumber)
         external
