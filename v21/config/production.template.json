@@ -1,0 +1,54 @@
+{
+  "version": "21.0.0",
+  "mode": "TEMPLATE_ONLY_DO_NOT_BROADCAST",
+  "audit_target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "network": {
+    "name": "Robinhood Chain",
+    "chain_id": 4663,
+    "public_rpc": "https://rpc.mainnet.chain.robinhood.com",
+    "production_rpc_env": "RH_RPC_URL",
+    "explorer": "https://robinhoodchain.blockscout.com",
+    "native_gas": "ETH",
+    "production_provider_requirement": "DEDICATED_PROVIDER_REQUIRED"
+  },
+  "roles": {
+    "deployer": "REPLACE_WITH_HARDWARE_BACKED_DEPLOYER",
+    "admin_multisig": "REPLACE_WITH_MULTISIG",
+    "mint_controller": "REPLACE_WITH_MINT_CONTROLLER",
+    "royalty_receiver": "REPLACE_WITH_MULTISIG",
+    "regulated_entitlement_admin": "REPLACE_WITH_MULTISIG",
+    "snapshot_publisher": "REPLACE_WITH_MULTISIG"
+  },
+  "provenance": {
+    "genesis_manifest_sha256": "0x7658b0b924dfa9578a7172798a94ac8f799993ff9f9045fed13022a360adcdbe",
+    "family_merkle_root": "0x6f1c3a173b47ed7551c72dacbe1a5b69ef2e08dce33c1d8e78eaa627bf76d1a3",
+    "supply": 5000,
+    "slither_high": 0,
+    "slither_medium": 0
+  },
+  "assets": [],
+  "contracts": {
+    "genesis_nft": null,
+    "evolution_engine": null,
+    "vault_factory": null,
+    "metadata_router": null,
+    "asset_registry": null,
+    "reward_router": null,
+    "lens": null,
+    "snapshot_anchor": null
+  },
+  "gates": {
+    "independent_security_review": false,
+    "final_reviewed_commit_frozen": false,
+    "metadata_cids_frozen": false,
+    "multisig_signers_verified": false,
+    "mint_controller_verified": false,
+    "asset_allowlist_verified": false,
+    "regulated_settlement_path_verified": false,
+    "dedicated_rpc_selected": false,
+    "blockscout_source_verification_rehearsed": false,
+    "final_deployment_rehearsal": false,
+    "incident_plan_approved": false,
+    "explicit_mainnet_authorization": false
+  }
+}
