@@ -1,0 +1,35 @@
+name: TROLL V42 Claims Integrity CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  claims:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Claims integrity tests
+        run: |
+          node --check v42/claims/claims-integrity.mjs
+          node v42/test/claims-integrity.test.mjs
+      - name: Validate approved claims register
+        run: |
+          node - <<'NODE'
+          import("./v42/claims/claims-integrity.mjs").then(({auditClaims})=>{
+            const r=require("./v42/approved-claims.json");
+            const a=auditClaims(r.claims);
+            if(!a.valid){console.error(a.invalid);process.exit(1)}
+            console.log("PASS approved claims");
+          })
+          NODE
+      - name: Confirm no contracts/signing
+        run: test ! -d v42/contracts
