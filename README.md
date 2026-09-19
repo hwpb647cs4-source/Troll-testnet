@@ -60,3 +60,24 @@ The flow is resumable and verifies the full V14 invariant:
 - snapshot provenance anchor
 
 Do not use production keys or real-value assets in this testnet launcher.
+
+
+## V14 full testnet proof: PASS
+
+**2026-09-18 — PASS**
+
+The full production-candidate V14 path has now passed on Robinhood Chain Testnet.
+
+All 17 acceptance gates were green, including:
+- frozen Genesis identity and NVIDIA family proof
+- 175,000 tTROLL burn → ASCENDED
+- 2.00x reward weight
+- persistent passive vault
+- 1,000 tUSD + 0.1 tGOLD + 2.5 tSILVER in the vault
+- 5.0 tNVDA regulated entitlement
+- successful ownership transfer from Wallet A to Wallet B
+- preserved collection burn/state/metadata/snapshot provenance
+
+See [V14_FULL_TESTNET_PROOF.md](./V14_FULL_TESTNET_PROOF.md).
+
+The next gate is security review and production configuration, not more feature expansion.
