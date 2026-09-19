@@ -1,0 +1,23 @@
+{
+  "name": "TROLL NFT 2.0 V19 Audit Freeze",
+  "audit_target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "source_path": "v19/contracts/TrollProductionCandidateV19.sol",
+  "test_path": "v19/test/v19.remediation.test.cjs",
+  "compiler": "solc 0.8.24",
+  "openzeppelin": "5.1.0",
+  "hardhat": "2.22.13",
+  "slither": "0.11.6",
+  "slither_baseline": {
+    "high": 0,
+    "medium": 0,
+    "low": 1,
+    "informational": 6,
+    "artifact_digest": "sha256:0091d23313d9a606d2cf57c114ee22bf8245aa06e12a070d2b45154a1a1db774"
+  },
+  "network_target": {
+    "name": "Robinhood Chain",
+    "chain_id": 4663
+  },
+  "release_state": "AUDIT_FREEZE_NO_BROADCAST",
+  "independent_review_required": true
+}
