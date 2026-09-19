@@ -1,0 +1,40 @@
+{
+  "schema_version": "36.0.0",
+  "mode": "MOBILE_READ_ONLY",
+  "contract_candidate": "V19",
+  "contract_candidate_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "mainnet_broadcast": false,
+  "external_security": {
+    "codex_security": {
+      "status": "PENDING_DESKTOP_CONNECTION",
+      "blocks_surrounding_development": false,
+      "blocks_mainnet_release": true
+    },
+    "independent_human_audit": {
+      "status": "OPEN",
+      "blocks_mainnet_release": true
+    }
+  },
+  "quick_links": [
+    {
+      "id": "live_passport",
+      "label": "Live Passport",
+      "path": "../../v23/passport/"
+    },
+    {
+      "id": "collection_intelligence",
+      "label": "Collection Intelligence",
+      "path": "../../v25/dashboard/"
+    },
+    {
+      "id": "release_control",
+      "label": "Release Control",
+      "path": "../../v32/cockpit/"
+    },
+    {
+      "id": "testnet_launcher",
+      "label": "V14 Testnet Launcher",
+      "path": "../../v14/mobile/"
+    }
+  ]
+}
