@@ -1,0 +1,17 @@
+{
+  "name": "troll-nft2-v16-production-rehearsal",
+  "private": true,
+  "version": "16.0.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "validate:config": "node scripts/validate-production-config.cjs config/production.template.json"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "@openzeppelin/contracts": "5.1.0",
+    "ethers": "6.13.4",
+    "hardhat": "2.22.13",
+    "solc": "0.8.24"
+  }
+}
