@@ -1,0 +1,13 @@
+{
+  "schema_version": "44.0.0",
+  "status": "RECOVERY_TOOLING_READY_DRILL_OPEN",
+  "requirements": {
+    "snapshot_format": true,
+    "integrity_verification": true,
+    "block_hash_reconciliation": true,
+    "recovery_point_selection": true,
+    "production_storage_selected": false,
+    "independent_backup_location": false,
+    "restore_drill_completed": false
+  }
+}
