@@ -1,0 +1,36 @@
+name: TROLL V40 Production Role Ceremony CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  roles:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Role-plan tests
+        run: |
+          node --check v40/roles/role-plan.mjs
+          node v40/test/role-plan.test.mjs
+      - name: Confirm template remains blocked
+        run: |
+          node - <<'NODE'
+          const x=require("./v40/production-roles.template.json");
+          if(x.status!=="OPEN_NOT_CONFIGURED") process.exit(1);
+          if(!JSON.stringify(x).includes("REPLACE_WITH_")) process.exit(1);
+          if(x.private_key_policy!=="NEVER_STORE_KEYS_OR_SEEDS_IN_REPOSITORY") process.exit(1);
+          console.log("PASS — production roles not falsely configured");
+          NODE
+      - name: Confirm no signing/contracts
+        run: |
+          test ! -d v40/contracts
+          ! grep -R "privateKey\|mnemonic\|eth_sendTransaction\|eth_sendRawTransaction" v40/roles
