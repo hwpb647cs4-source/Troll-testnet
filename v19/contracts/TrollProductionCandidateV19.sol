@@ -772,6 +772,10 @@ contract ReentrantMintReceiverV19 is IERC721Receiver {
         nft = TrollInHoodGenesisV19(nft_);
     }
 
+    function attackMint() external {
+        nft.mintFromController(address(this), 1);
+    }
+
     function onERC721Received(address, address, uint256, bytes calldata)
         external
         returns (bytes4)
