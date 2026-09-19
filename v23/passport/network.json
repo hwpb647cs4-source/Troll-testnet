@@ -1,0 +1,38 @@
+{
+  "schema_version": "23.0.0",
+  "network": {
+    "name": "Robinhood Chain Testnet",
+    "chain_id": 46630,
+    "rpc_url": "https://rpc.testnet.chain.robinhood.com",
+    "explorer": "https://explorer.testnet.chain.robinhood.com"
+  },
+  "genesis_nft": "0x72751B23ad3585d58c40A4F58dBc6A8F3566E19D",
+  "known_testnet_proofs": {
+    "1": {
+      "vault": "0xf231D1F888cC7fb3A5d84f48a345B6CBbCf3D866e",
+      "expected_family": 5,
+      "expected_burn_wei": "175000000000000000000000",
+      "expected_state": 4,
+      "expected_weight_bps": 20000,
+      "expected_final_owner": "0xdc2f1175f73e474f673717bc91583865cb3db074",
+      "proof_snapshot": {
+        "tUSD": {
+          "amount": "1000.0",
+          "classification": "DIRECT_VAULT"
+        },
+        "tGOLD": {
+          "amount": "0.1",
+          "classification": "DIRECT_VAULT"
+        },
+        "tSILVER": {
+          "amount": "2.5",
+          "classification": "DIRECT_VAULT"
+        },
+        "tNVDA": {
+          "amount": "5.0",
+          "classification": "REGULATED_ENTITLEMENT"
+        }
+      }
+    }
+  }
+}
