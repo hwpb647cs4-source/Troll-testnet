@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import {buildProofBundle,verifyProofBundle} from "../proof/proof-bundle.mjs";
+import {collectionProofRoot} from "../proof/collection-root.mjs";
+const passport={token_id:1,network:{chain_id:46630},as_of_block:123,identity:{owner:"0x1",family:"NVIDIA",family_revealed:true,genesis_manifest_sha256:"0xabc",family_merkle_root:"0xdef"},evolution:{state:"ASCENDED",troll_burned_raw:"175000",reward_weight_bps:20000},bound_vault:"0xvault"};
+const b=buildProofBundle({tokenId:1,passport,timeline:[{type:"MINT"}],rewardBiography:{epochs:["E1"]},indexEvidence:{indexed_through_block:123},generatedAt:"2026-09-19T00:00:00Z"});
+assert.equal(verifyProofBundle(b).valid,true);assert.equal(b.bundle_sha256.length,64);
+const tampered=structuredClone(b);tampered.evolution.state="OMEGA";assert.equal(verifyProofBundle(tampered).valid,false);
+const b2=buildProofBundle({tokenId:2,passport:{...passport,token_id:2},timeline:[],generatedAt:"2026-09-19T00:00:00Z"});
+const root=collectionProofRoot([{token_id:1,bundle_sha256:b.bundle_sha256},{token_id:2,bundle_sha256:b2.bundle_sha256}]);
+assert.ok(root.startsWith("0x"));assert.equal(root.length,66);
+console.log("V31 VERIFIABLE PROOF BUNDLE TEST PASS");
