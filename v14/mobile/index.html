@@ -62,6 +62,8 @@ a{color:var(--b)}.progress{height:10px;background:#07110d;border:1px solid #294a
 <h2>4. Run Full V14 Proof</h2>
 <div class="sub">This is resumable. If the wallet/browser interrupts the flow, reopen the page, reconnect Wallet A, load the build, and press this button again. Completed steps are checked on-chain and skipped.</div>
 <button id="run" disabled>Run / Resume Full V14 Testnet Proof</button>
+<button id="retryTransfer" class="secondary" disabled>Retry Final A → B Transfer Only</button>
+<button id="verifyOnly" class="secondary" disabled>Verify Current V14 State Only</button>
 <div id="runState" class="s">Not started.</div>
 </section>
 
@@ -224,6 +226,8 @@ function updateButtons(){
   $("deployBatcher").disabled=!(account&&build)||!!batcher;
   $("deployStack").disabled=!(account&&build&&batcher);
   $("run").disabled=!(account&&build&&batcher&&addresses);
+  $("retryTransfer").disabled=!(account&&build&&batcher&&addresses);
+  $("verifyOnly").disabled=!(account&&build&&batcher&&addresses);
 }
 async function deployBatcher(){
   await requireChain();
@@ -481,6 +485,55 @@ async function verify(receiver,keyNVDA,snapHash){
   Object.entries(checks).forEach(x=>log((x[1]?"✅ ":"❌ ")+x[0]));
   log("====================================");
 }
+async function retryFinalTransfer(){
+  await requireChain();
+  const receiver=$("receiver").value.trim();
+  if(!ethers.isAddress(receiver))throw new Error("Enter Wallet B public address.");
+  if(receiver.toLowerCase()===account.toLowerCase())throw new Error("Wallet B must be different.");
+
+  const nft=contract("TrollInHoodGenesisV14","nft");
+  const ownerBefore=await nft.ownerOf(1);
+  log("TRANSFER DIAGNOSTIC");
+  log("Wallet A / connected signer: "+account);
+  log("Current token #1 owner: "+ownerBefore);
+  log("Target Wallet B: "+receiver);
+
+  if(ownerBefore.toLowerCase()===receiver.toLowerCase()){
+    log("SKIP transfer — Wallet B already owns #0001");
+  }else{
+    if(ownerBefore.toLowerCase()!==account.toLowerCase()){
+      throw new Error("Connected Wallet A is not the current NFT owner.");
+    }
+
+    // Fail early with the exact revert reason before asking the wallet to broadcast.
+    await nft.transferFrom.staticCall(account,receiver,1);
+    await waitTx("FINAL RETRY: Transfer Genesis #0001 A → B",
+      await nft.transferFrom(account,receiver,1)
+    );
+  }
+
+  const ownerAfter=await nft.ownerOf(1);
+  log("Owner after transfer attempt: "+ownerAfter);
+  if(ownerAfter.toLowerCase()!==receiver.toLowerCase()){
+    throw new Error("Transfer receipt completed but ownerOf(1) is still not Wallet B.");
+  }
+
+  const registry=contract("TrollAssetRegistryV14","registry");
+  const keyNVDA=await registry.keyFor(CHAIN_ID,addresses.tNVDA);
+  const snapHash=ethers.keccak256(ethers.toUtf8Bytes("TROLL-V14-ASSET-SNAPSHOT-1"));
+  await verify(receiver,keyNVDA,snapHash);
+}
+
+async function verifyOnly(){
+  await requireChain();
+  const receiver=$("receiver").value.trim();
+  if(!ethers.isAddress(receiver))throw new Error("Enter Wallet B public address.");
+  const registry=contract("TrollAssetRegistryV14","registry");
+  const keyNVDA=await registry.keyFor(CHAIN_ID,addresses.tNVDA);
+  const snapHash=ethers.keccak256(ethers.toUtf8Bytes("TROLL-V14-ASSET-SNAPSHOT-1"));
+  await verify(receiver,keyNVDA,snapHash);
+}
+
 async function safe(fn,label){
   try{await fn()}catch(e){log("ERROR "+label+": "+(e.shortMessage||e.message||e));console.error(e);}
 }
@@ -490,6 +543,8 @@ $("load").onclick=()=>safe(loadBuild,"load");
 $("deployBatcher").onclick=()=>safe(deployBatcher,"batcher deploy");
 $("deployStack").onclick=()=>safe(deployStack,"stack deploy");
 $("run").onclick=()=>safe(runProof,"V14 proof");
+$("retryTransfer").onclick=()=>safe(retryFinalTransfer,"final transfer retry");
+$("verifyOnly").onclick=()=>safe(verifyOnly,"verify current state");
 $("receiver").addEventListener("change",save);
 </script>
 </body>
