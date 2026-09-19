@@ -81,3 +81,24 @@ All 17 acceptance gates were green, including:
 See [V14_FULL_TESTNET_PROOF.md](./V14_FULL_TESTNET_PROOF.md).
 
 The next gate is security review and production configuration, not more feature expansion.
+
+
+## V19 / V20 security milestone
+
+**V19 remediation: PASS**
+- original V15 Slither Medium `locked-ether` finding remediated by rejecting direct native ETH in the passive vault;
+- original V15 Slither Medium `reentrancy-no-eth` finding remediated with nonReentrant minting, pre-callback token-range reservation, and pre-callback timestamp state;
+- malicious safe-mint receiver regression: PASS;
+- full lifecycle/security regression: PASS;
+- Slither 0.11.6: **High 0 / Medium 0 / Low 1 / Informational 6**.
+
+**V20 audit freeze: PASS**
+- exact independent-review target: `c3750b9458156e962393059f78c92e79802bf622`;
+- reproducible source/ABI/bytecode manifest generated;
+- V19 Slither baseline revalidated;
+- audit evidence artifact generated;
+- mainnet remains explicitly blocked pending independent review.
+
+Release blocker: [GitHub Issue #7](../../issues/7)
+
+No new core product mechanics should be added before review closes.
