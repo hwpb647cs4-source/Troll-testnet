@@ -767,13 +767,14 @@ contract ReentrantMintReceiverV19 is IERC721Receiver {
     TrollInHoodGenesisV19 public immutable nft;
     bool public attempted;
     bool public reentrySucceeded;
+    uint256 public lastFirstTokenId;
 
     constructor(address nft_) {
         nft = TrollInHoodGenesisV19(nft_);
     }
 
     function attackMint() external {
-        nft.mintFromController(address(this), 1);
+        lastFirstTokenId = nft.mintFromController(address(this), 1);
     }
 
     function onERC721Received(address, address, uint256, bytes calldata)
@@ -781,7 +782,8 @@ contract ReentrantMintReceiverV19 is IERC721Receiver {
         returns (bytes4)
     {
         attempted = true;
-        try nft.mintFromController(address(this), 1) {
+        try nft.mintFromController(address(this), 1) returns (uint256 firstTokenId) {
+            lastFirstTokenId = firstTokenId;
             reentrySucceeded = true;
         } catch {
             reentrySucceeded = false;
