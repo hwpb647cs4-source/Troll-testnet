@@ -1,0 +1,31 @@
+{
+  "schema_version": "46.0.0",
+  "default_public_fields": [
+    "token_id",
+    "family",
+    "evolution_state",
+    "reward_weight_bps",
+    "bound_vault",
+    "stamps",
+    "as_of_block",
+    "proof_hash"
+  ],
+  "conditional_fields": [
+    "current_owner",
+    "holder_since",
+    "transfer_count",
+    "asset_rows",
+    "entitlement_rows",
+    "agent_status"
+  ],
+  "never_collect": [
+    "private_key",
+    "seed_phrase",
+    "mnemonic",
+    "recovery_code",
+    "precise_location",
+    "device_id"
+  ],
+  "analytics_mode": "AGGREGATE_FIRST",
+  "noncustodial": true
+}
