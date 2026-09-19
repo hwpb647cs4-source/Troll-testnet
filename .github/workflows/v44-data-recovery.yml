@@ -1,0 +1,31 @@
+name: TROLL V44 Data Recovery Integrity CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  recovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Recovery integrity tests
+        run: |
+          node --check v44/recovery/recovery-integrity.mjs
+          node v44/test/recovery-integrity.test.mjs
+      - name: Confirm recovery drill remains open
+        run: |
+          node - <<'NODE'
+          const x=require("./v44/status.json");
+          if(x.requirements.restore_drill_completed!==false) process.exit(1);
+          console.log("PASS — restore drill not falsely claimed");
+          NODE
+          test ! -d v44/contracts
