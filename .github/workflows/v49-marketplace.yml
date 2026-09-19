@@ -1,0 +1,27 @@
+name: TROLL V49 Marketplace Interoperability CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Marketplace metadata tests
+        run: |
+          node --check v49/metadata/marketplace-adapter.mjs
+          node v49/test/marketplace-adapter.test.mjs
+      - name: Confirm production metadata not falsely frozen
+        run: |
+          grep -q "EXAMPLE_NOT_FROZEN" v49/examples/token-0001.json
+          test ! -d v49/contracts
