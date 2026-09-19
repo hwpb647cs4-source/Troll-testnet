@@ -1,0 +1,76 @@
+name: TROLL V18 Slither Static Analysis
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  slither:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: v15/package.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify frozen V15 source is unchanged
+        run: |
+          git diff --exit-code             5b5b9ce5bfa1d97ee2500234411648f49c11a71f             -- v15/
+
+      - name: Install V15 dependencies
+        working-directory: v15
+        run: npm install --no-audit --no-fund
+
+      - name: Compile V15
+        working-directory: v15
+        run: npm run compile
+
+      - name: Run V15 adversarial tests
+        working-directory: v15
+        run: npm test
+
+      - name: Install pinned Slither
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install slither-analyzer==0.11.6
+          slither --version
+
+      - name: Run Slither
+        working-directory: v15
+        run: |
+          mkdir -p ../v18/generated
+          set +e
+          slither .             --exclude-dependencies             --json ../v18/generated/slither.json
+          code=$?
+          set -e
+          if [ ! -s ../v18/generated/slither.json ]; then
+            echo "Slither failed without producing JSON"
+            exit $code
+          fi
+          echo "Slither command exit code: $code"
+
+      - name: Enforce High/Medium detector gate
+        run: python v18/scripts/slither-gate.py v18/generated/slither.json
+
+      - name: Upload Slither report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TROLL-V18-SLITHER-REPORT
+          path: v18/generated/slither.json
+          if-no-files-found: warn
+          retention-days: 30
