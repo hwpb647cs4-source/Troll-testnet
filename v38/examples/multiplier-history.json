@@ -1,0 +1,22 @@
+{
+  "schema_version": "38.0.0",
+  "asset_uid": "EXAMPLE_ONLY",
+  "symbol": "NVDA",
+  "chain_id": 4663,
+  "contract_address": "REPLACE_WITH_V37_VERIFIED_CONTRACT",
+  "observations": [
+    {
+      "observed_at": "2026-09-19T00:00:00Z",
+      "current_multiplier": "1.0",
+      "pending_multiplier": null,
+      "evidence_ref": "OFFICIAL_ASSET_API_SNAPSHOT"
+    },
+    {
+      "observed_at": "2026-09-20T00:00:00Z",
+      "current_multiplier": "1.0",
+      "pending_multiplier": "2.0",
+      "evidence_ref": "OFFICIAL_ASSET_API_SNAPSHOT"
+    }
+  ],
+  "status": "EXAMPLE_NOT_PRODUCTION"
+}
