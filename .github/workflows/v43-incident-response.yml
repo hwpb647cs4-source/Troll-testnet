@@ -1,0 +1,28 @@
+name: TROLL V43 Incident Response CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  incident-response:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Incident response tests
+        run: |
+          node --check v43/response/incident-response.mjs
+          node v43/test/incident-response.test.mjs
+      - name: Confirm preparation-only
+        run: |
+          test ! -d v43/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction" v43/response
+          echo "PASS — V43 runbook only"
