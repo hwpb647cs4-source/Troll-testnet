@@ -1,0 +1,9 @@
+{
+  "schema_version": "26.0.0",
+  "chain_id": 46630,
+  "rpc_url": "https://rpc.testnet.chain.robinhood.com",
+  "nft_contract": "0x72751B23ad3585d58c40A4F58dBc6A8F3566E19D",
+  "start_block": 0,
+  "chunk_size": 1500,
+  "note": "Set start_block to the NFT deployment block before production indexing to avoid unnecessary RPC scanning."
+}
