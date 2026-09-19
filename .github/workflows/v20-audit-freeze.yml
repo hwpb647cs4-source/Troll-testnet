@@ -1,0 +1,88 @@
+name: TROLL V20 Audit Freeze CI
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-freeze-v19:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: v19/package.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify exact V19 review target is unchanged
+        run: |
+          git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+
+      - name: Install exact V19 dependencies
+        working-directory: v19
+        run: npm install --no-audit --no-fund
+
+      - name: V19 static invariants
+        working-directory: v19
+        run: npm run validate:static
+
+      - name: Compile exact V19 target
+        working-directory: v19
+        run: npm run compile
+
+      - name: Run focused + full V19 tests
+        working-directory: v19
+        run: npm test
+
+      - name: Install pinned Slither
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install slither-analyzer==0.11.6
+
+      - name: Re-run Slither V19 baseline
+        working-directory: v19
+        run: |
+          mkdir -p ../v20/generated
+          set +e
+          slither . --exclude-dependencies --json ../v20/generated/slither.json
+          code=$?
+          set -e
+          if [ ! -s ../v20/generated/slither.json ]; then
+            echo "Missing Slither JSON"
+            exit $code
+          fi
+          python scripts/slither-gate.py ../v20/generated/slither.json
+
+      - name: Generate V20 reproducible build manifest
+        run: node v20/scripts/generate-build-manifest.cjs
+
+      - name: Upload V20 audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: TROLL-V20-AUDIT-EVIDENCE
+          path: |
+            v20/AUDIT_TARGET.json
+            v20/docs
+            v20/generated/AUDIT_BUILD_MANIFEST.json
+            v20/generated/slither.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Confirm release stays blocked
+        run: |
+          grep -q "NO MAINNET BROADCAST" v20/docs/RELEASE_GATE.md
+          grep -q '"release_state": "AUDIT_FREEZE_NO_BROADCAST"' v20/AUDIT_TARGET.json
+          echo "PASS — V20 remains no-broadcast"
