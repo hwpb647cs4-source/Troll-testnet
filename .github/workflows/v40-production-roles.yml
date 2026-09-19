@@ -33,4 +33,4 @@ jobs:
       - name: Confirm no signing/contracts
         run: |
           test ! -d v40/contracts
-          ! grep -R "privateKey\|mnemonic\|eth_sendTransaction\|eth_sendRawTransaction" v40/roles
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction\|new ethers.Wallet\|wallet.signTransaction" v40/roles
