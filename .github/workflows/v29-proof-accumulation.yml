@@ -1,0 +1,30 @@
+name: TROLL V29 Proof Accumulation CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  proof-timeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Syntax
+        run: |
+          node --check v29/timeline/proof-timeline.mjs
+          node --check v29/epochs/epoch-manifest.mjs
+      - name: Proof timeline and epoch tests
+        run: node v29/test/proof-timeline.test.mjs
+      - name: Confirm no transaction surface
+        run: |
+          test ! -d v29/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction\|eth_requestAccounts" v29/timeline v29/epochs
+          echo "PASS — V29 proof/accounting only"
