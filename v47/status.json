@@ -1,0 +1,9 @@
+{
+  "schema_version": "47.0.0",
+  "status": "SLO_DEFINITIONS_READY_PRODUCTION_MONITORING_OPEN",
+  "production_monitoring_provider_selected": false,
+  "alert_routes_configured": false,
+  "synthetic_checks_enabled": false,
+  "dashboard_deployed": false,
+  "note": "Targets and health logic are ready; real production telemetry remains an external infrastructure step."
+}
