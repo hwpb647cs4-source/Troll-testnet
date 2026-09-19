@@ -17,6 +17,8 @@ jobs:
         working-directory: v16
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -26,6 +28,13 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Validate blocked production template
         run: npm run validate:config
+      - name: Verify audited V15 source is unchanged
+        working-directory: .
+        run: git diff --exit-code 5b5b9ce5bfa1d97ee2500234411648f49c11a71f -- v15/contracts/TrollProductionCandidateV15.sol
+      - name: Stage exact audited V15 source into rehearsal project
+        run: |
+          mkdir -p contracts
+          cp ../v15/contracts/TrollProductionCandidateV15.sol contracts/
       - name: Compile exact V15 source through V16 rehearsal config
         run: npm run compile
       - name: Confirm no production broadcast credentials exist in CI
