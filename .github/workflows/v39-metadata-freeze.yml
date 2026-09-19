@@ -1,0 +1,27 @@
+name: TROLL V39 Metadata Freeze CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  metadata-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Metadata freeze tests
+        run: |
+          node --check v39/freeze/metadata-freeze.mjs
+          node v39/test/metadata-freeze.test.mjs
+      - name: Ensure production metadata gate remains open
+        run: |
+          node -e 'const x=require("./v39/status.json"); if(x.status!=="OPEN") process.exit(1); if(Object.values(x.requirements).some(Boolean)) process.exit(1); console.log("PASS — metadata not falsely frozen")'
+          test ! -d v39/contracts
