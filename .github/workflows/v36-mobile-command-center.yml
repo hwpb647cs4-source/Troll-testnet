@@ -1,0 +1,26 @@
+name: TROLL V36 Mobile Command Center CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-command:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate mobile command center
+        run: node v36/test/validate-v36.cjs
+      - name: Confirm no signing/broadcast surface
+        run: |
+          test ! -d v36/contracts
+          ! grep -R "eth_requestAccounts\|eth_sendTransaction\|eth_sendRawTransaction\|privateKey" v36/mobile
+          echo "PASS — V36 mobile read-only"
