@@ -1,0 +1,29 @@
+name: TROLL V38 Corporate Action Integrity CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  corporate-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Corporate-action integrity tests
+        run: |
+          node --check v38/integrity/corporate-actions.mjs
+          node v38/test/corporate-actions.test.mjs
+      - name: Confirm no valuation/signing/contracts
+        run: |
+          test ! -d v38/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction\|eth_requestAccounts" v38/integrity
+          grep -q "does not calculate USD market value" v38/docs/CORPORATE_ACTION_INTEGRITY.md
+          echo "PASS — V38 integrity/read layer"
