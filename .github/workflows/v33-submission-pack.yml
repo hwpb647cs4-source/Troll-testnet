@@ -1,0 +1,29 @@
+name: TROLL V33 Ecosystem Submission Pack CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  submission-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate official-reference manifest
+        run: |
+          node -e 'const r=require("./v33/OFFICIAL_REFERENCES.json"); if(r.official_sources.length<6) process.exit(1); if(!r.official_sources.every(x=>x.url.startsWith("https://"))) process.exit(1); console.log("PASS official references")'
+      - name: Check disclosure language
+        run: |
+          grep -qi "no Robinhood endorsement" v33/docs/ECOSYSTEM_PITCH.md
+          grep -qi "not.*endorsed\|not.*affiliated" v33/docs/INTEREST_FORM_DRAFT.md
+          echo "PASS disclosure language"
+      - name: Confirm no contract changes
+        run: test ! -d v33/contracts
