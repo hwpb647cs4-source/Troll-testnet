@@ -1,0 +1,17 @@
+{
+  "name": "troll-nft2-v15-security-hardening",
+  "private": true,
+  "version": "15.0.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "validate:static": "node scripts-static-check.cjs"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "@openzeppelin/contracts": "5.1.0",
+    "ethers": "6.13.4",
+    "hardhat": "2.22.13",
+    "solc": "0.8.24"
+  }
+}
