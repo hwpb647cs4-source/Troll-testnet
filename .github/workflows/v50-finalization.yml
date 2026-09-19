@@ -1,0 +1,27 @@
+name: TROLL V50 Finalization Freeze CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finalization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate finalization state
+        run: node v50/test/finalization.test.cjs
+      - name: Confirm no new product contracts
+        run: |
+          test ! -d v50/contracts
+          grep -q "No more feature layers before launch readiness" v50/FINALIZATION.md
+          grep -q "NO MAINNET BROADCAST" v50/FINALIZATION.md
+          echo "PASS — scope frozen"
