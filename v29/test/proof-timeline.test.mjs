@@ -1,0 +1,14 @@
+import assert from "node:assert/strict";
+import {buildAccumulationTimeline,accumulationSummary} from "../timeline/proof-timeline.mjs";
+import {validateEpochManifest} from "../epochs/epoch-manifest.mjs";
+const Z="0x0000000000000000000000000000000000000000",A="0x1111111111111111111111111111111111111111",B="0x2222222222222222222222222222222222222222";
+const idx={timelines:{transfers:[{block:10,tx:"0x1",token_id:1,from:Z,to:A},{block:40,tx:"0x4",token_id:1,from:A,to:B}],burns:[{block:20,tx:"0x2",token_id:1,credited_raw:"10000",cumulative_raw:"10000",state:1},{block:30,tx:"0x3",token_id:1,credited_raw:"165000",cumulative_raw:"175000",state:4}]}};
+const ledger={by_token:{1:[{epoch_id:"E1",token_id:1,chain_id:46630,asset_contract:"0xaaa",symbol:"tGOLD",asset_class:"GOLD",label:"HISTORICAL_PROOF",amount_raw:"1",decimals:18,evidence_ref:"proof:1",block:35}]}};
+const passport={identity:{family_revealed:true,family:"NVIDIA",family_merkle_root:"0xroot"},bound_vault:"0xvault"};
+const events=buildAccumulationTimeline({tokenId:1,indexHistory:idx,rewardLedger:ledger,passport});
+assert.ok(events.some(x=>x.type==="MINT"));assert.ok(events.some(x=>x.type==="TRANSFER"));assert.equal(events.filter(x=>x.type==="EVOLUTION").length,2);assert.ok(events.some(x=>x.type==="REWARD"));assert.ok(events.some(x=>x.type==="VAULT_CREATED"));
+const sum=accumulationSummary(events);assert.equal(sum.types.TROLL_BURN,2);
+const m={epoch_id:"E1",chain_id:46630,allocations:[{token_id:1,asset_contract:"0xaaa",label:"HISTORICAL_PROOF",amount_raw:"1",decimals:18}]};
+const v=validateEpochManifest(m);assert.equal(v.valid,true);assert.equal(v.computed_sha256.length,64);
+const bad=validateEpochManifest({...m,allocations:[...m.allocations,...m.allocations]});assert.equal(bad.valid,false);
+console.log("V29 PROOF-OF-ACCUMULATION TEST PASS");
