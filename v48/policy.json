@@ -1,0 +1,25 @@
+{
+  "schema_version": "48.0.0",
+  "supported_locales": [
+    "en",
+    "pt-BR",
+    "es"
+  ],
+  "fallback_locale": "en",
+  "canonical_evidence_ids": [
+    "LIVE_ONCHAIN_BALANCE",
+    "REGULATED_ENTITLEMENT",
+    "HISTORICAL_PROOF",
+    "REFERENCE_ONLY"
+  ],
+  "requirements": [
+    "SEMANTIC_LABELS",
+    "IMAGE_ALT_TEXT",
+    "LIVE_STATUS_TEXT",
+    "REDUCED_MOTION",
+    "TEXT_NOT_COLOR_ONLY",
+    "LOCALIZED_NUMBERS_DATES",
+    "CLAIM_SEMANTICS_PRESERVED"
+  ],
+  "protocol_values_never_localized": true
+}
