@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>TROLL NFT 2.0 — Value Passport</title>
+<style>
+:root{--bg:#050908;--p:#0b1511;--line:#284738;--g:#70ff72;--m:#97ac9e;--w:#f0fff4;--gold:#ffd66f;--blue:#7ec7ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#193f2e,#050908 50%);color:var(--w);font-family:system-ui,-apple-system,sans-serif}
+.w{max-width:980px;margin:auto;padding:16px}.p{background:linear-gradient(180deg,#0c1812,#07110d);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+h1{margin:0;font-size:34px}h1 b{color:var(--g)}h2{font-size:18px;margin:0 0 10px}.sub{color:#bfd1c4;line-height:1.5;font-size:13px}.tag{display:inline-block;border:1px solid #476d57;border-radius:999px;padding:5px 9px;font-size:10px;margin:3px;color:#c7ffd0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.r{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #173126;font-size:12px}.r span{color:var(--m)}.r b{text-align:right}.big{font-size:27px;font-weight:900;color:var(--g)}
+.asset{display:grid;grid-template-columns:1.1fr .8fr 1fr;gap:8px;padding:9px 0;border-bottom:1px solid #173126;font-size:12px}.asset .muted{color:var(--m)}
+.warn{color:#ffdda0;font-size:11px;line-height:1.45}.good{color:#baffc4}.blue{color:var(--blue)}.gold{color:var(--gold)}
+</style>
+</head>
+<body><div class="w">
+<section class="p">
+<div class="tag">READ-ONLY • TESTNET EXAMPLE</div>
+<h1>TROLL NFT 2.0 <b>Value Passport</b></h1>
+<div class="sub">A verifiable biography of identity, evolution, wallet accumulation, entitlements and ownership history. No guaranteed price, return or redemption.</div>
+</section>
+
+<div class="grid">
+<section class="p">
+<h2>Identity</h2>
+<div class="big" id="family">—</div>
+<div class="r"><span>Token</span><b id="token">—</b></div>
+<div class="r"><span>Series</span><b id="series">—</b></div>
+<div class="r"><span>Genesis</span><b class="good">VERIFIED</b></div>
+<div class="r"><span>Transfer count</span><b id="transfers">—</b></div>
+</section>
+
+<section class="p">
+<h2>Evolution</h2>
+<div class="big" id="state">—</div>
+<div class="r"><span>TROLL burned</span><b id="burn">—</b></div>
+<div class="r"><span>Reward weight</span><b id="weight">—</b></div>
+<div class="r"><span>Current owner</span><b id="owner">—</b></div>
+</section>
+</div>
+
+<section class="p">
+<h2>Protected Vault</h2>
+<div class="r"><span>Bound vault</span><b class="blue" id="vault">—</b></div>
+<div id="assets"></div>
+</section>
+
+<section class="p">
+<h2>Regulated Entitlements</h2>
+<div id="entitlements"></div>
+<div class="warn">An entitlement is shown separately from freely transferable vault assets. A reference such as NVDA does not by itself prove legal stock ownership or unrestricted transfer rights.</div>
+</section>
+
+<section class="p">
+<h2>Evidence-backed Stamps</h2>
+<div id="stamps"></div>
+</section>
+
+<section class="p">
+<h2>Evidence</h2>
+<div class="r"><span>Chain ID</span><b id="chain">—</b></div>
+<div class="r"><span>As-of block</span><b id="block">—</b></div>
+<div class="r"><span>Snapshot</span><b id="snapshot">—</b></div>
+<div class="warn" id="disclaimer"></div>
+</section>
+</div>
+
+<script>
+const fmt=(raw,d)=>{try{return (BigInt(raw)/10n**BigInt(Math.max(0,d-4))).toString()/10000}catch{return raw}}
+const short=a=>a&&a.startsWith("0x")?a.slice(0,8)+"…"+a.slice(-6):a;
+async function main(){
+  const r=await fetch("../examples/token-0001-passport.json?ts="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error("passport example not found");
+  const p=await r.json();
+
+  token.textContent="#"+String(p.token_id).padStart(4,"0");
+  family.textContent=p.identity.family;
+  series.textContent=p.identity.series;
+  transfers.textContent=p.ownership.transfer_count;
+  state.textContent=p.evolution.state;
+  burn.textContent=(Number(p.evolution.troll_burned_raw)/1e18).toLocaleString()+" TROLL";
+  weight.textContent=(p.evolution.reward_weight_bps/10000).toFixed(2)+"×";
+  owner.textContent=short(p.ownership.current_owner);
+  vault.textContent=short(p.vault.address);
+
+  assets.innerHTML=p.vault.assets.map(a=>`
+    <div class="asset">
+      <b>${a.symbol||a.asset_class}</b>
+      <span class="muted">${a.asset_class}</span>
+      <span>${Number(a.amount_raw)/(10**a.decimals)}</span>
+    </div>`).join("");
+
+  entitlements.innerHTML=p.entitlements.map(e=>`
+    <div class="asset">
+      <b>${e.reference}</b>
+      <span class="muted">ENTITLEMENT</span>
+      <span>${Number(e.amount_raw)/1e18}</span>
+    </div>`).join("");
+
+  stamps.innerHTML=p.stamps.map(s=>`<span class="tag">${s.label}</span>`).join("");
+  chain.textContent=p.evidence.chain_id;
+  block.textContent=p.evidence.as_of_block;
+  snapshot.textContent=p.evidence.snapshot_hash;
+  disclaimer.textContent=p.disclaimer;
+}
+main().catch(e=>document.body.insertAdjacentHTML("beforeend","<pre>"+e.message+"</pre>"));
+</script>
+</body>
+</html>

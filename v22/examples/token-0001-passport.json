@@ -1,0 +1,115 @@
+{
+  "schema_version": "22.0.0",
+  "token_id": 1,
+  "identity": {
+    "series": "GENESIS_I",
+    "family": "NVIDIA",
+    "genesis_manifest_sha256": "0x7658b0b924dfa9578a7172798a94ac8f799993ff9f9045fed13022a360adcdbe",
+    "family_merkle_root": "0x6f1c3a173b47ed7551c72dacbe1a5b69ef2e08dce33c1d8e78eaa627bf76d1a3",
+    "rarity": "TESTNET_PROOF",
+    "traits": {}
+  },
+  "evolution": {
+    "troll_burned_raw": "175000000000000000000000",
+    "state": "ASCENDED",
+    "reward_weight_bps": 20000
+  },
+  "vault": {
+    "address": "0xf231D1F888cC7fb3A5d84f48a345B6CBbCf3D866e",
+    "assets": [
+      {
+        "chain_id": 46630,
+        "contract": "TESTNET_TUSD",
+        "symbol": "tUSD",
+        "asset_class": "STABLE",
+        "amount_raw": "1000000000",
+        "decimals": 6
+      },
+      {
+        "chain_id": 46630,
+        "contract": "TESTNET_TGOLD",
+        "symbol": "tGOLD",
+        "asset_class": "GOLD",
+        "amount_raw": "100000000000000000",
+        "decimals": 18
+      },
+      {
+        "chain_id": 46630,
+        "contract": "TESTNET_TSILVER",
+        "symbol": "tSILVER",
+        "asset_class": "SILVER",
+        "amount_raw": "2500000000000000000",
+        "decimals": 18
+      }
+    ]
+  },
+  "entitlements": [
+    {
+      "chain_id": 46630,
+      "contract": "TESTNET_TNVDA",
+      "reference": "NVDA",
+      "amount_raw": "5000000000000000000",
+      "manifest_hash": "TESTNET_MANIFEST_HASH"
+    }
+  ],
+  "ownership": {
+    "current_owner": "0xdc2f1175f73e474f673717bc91583865cb3db074",
+    "mint_timestamp": 0,
+    "holder_since": 0,
+    "transfer_count": 1
+  },
+  "agent": {
+    "operating_account": null,
+    "policy_enabled": false,
+    "simulation_required": true,
+    "human_signature_required": true
+  },
+  "stamps": [
+    {
+      "id": "GENESIS_I",
+      "label": "Genesis I",
+      "evidence_ref": "identity.series"
+    },
+    {
+      "id": "FAMILY_VERIFIED",
+      "label": "Family Verified",
+      "evidence_ref": "identity.family_merkle_root"
+    },
+    {
+      "id": "ASCENDED",
+      "label": "Ascended",
+      "evidence_ref": "evolution.state"
+    },
+    {
+      "id": "VAULT_CREATED",
+      "label": "Vault Created",
+      "evidence_ref": "vault.address"
+    },
+    {
+      "id": "GOLD_HELD",
+      "label": "Gold Held",
+      "evidence_ref": "vault.assets"
+    },
+    {
+      "id": "SILVER_HELD",
+      "label": "Silver Held",
+      "evidence_ref": "vault.assets"
+    },
+    {
+      "id": "STOCK_ENTITLEMENT",
+      "label": "Stock Entitlement",
+      "evidence_ref": "entitlements"
+    },
+    {
+      "id": "HISTORY_PRESERVED",
+      "label": "History Preserved",
+      "evidence_ref": "ownership.transfer_count"
+    }
+  ],
+  "evidence": {
+    "chain_id": 46630,
+    "as_of_block": 0,
+    "snapshot_hash": "TESTNET_SNAPSHOT"
+  },
+  "disclaimer": "This passport describes verifiable protocol state. It does not guarantee market value, investment returns, yield, redemption rights, or stock ownership."
+}
