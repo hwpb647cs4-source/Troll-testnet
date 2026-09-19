@@ -1,0 +1,21 @@
+{
+  "schema_version":"24.0.0",
+  "labels":[
+    {
+      "id":"LIVE_ONCHAIN_BALANCE",
+      "description":"Exact token balance queried from the configured chain and contract at an identified block."
+    },
+    {
+      "id":"REGULATED_ENTITLEMENT",
+      "description":"Token-ID-bound entitlement tracked separately from freely transferable vault assets."
+    },
+    {
+      "id":"HISTORICAL_PROOF",
+      "description":"Previously verified proof-state evidence that is not represented as a current live balance."
+    },
+    {
+      "id":"REFERENCE_ONLY",
+      "description":"Theme/affinity/reference with no asset-ownership claim."
+    }
+  ]
+}
