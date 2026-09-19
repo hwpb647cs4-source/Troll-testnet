@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TROLL NFT 2.0 Value Passport v22",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "token_id",
+    "identity",
+    "evolution",
+    "vault",
+    "entitlements",
+    "ownership",
+    "stamps",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "22.0.0"
+    },
+    "token_id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5000
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "series",
+        "family",
+        "genesis_manifest_sha256",
+        "family_merkle_root"
+      ],
+      "properties": {
+        "series": {
+          "const": "GENESIS_I"
+        },
+        "family": {
+          "type": "string"
+        },
+        "genesis_manifest_sha256": {
+          "type": "string"
+        },
+        "family_merkle_root": {
+          "type": "string"
+        },
+        "rarity": {
+          "type": "string"
+        },
+        "traits": {
+          "type": "object"
+        }
+      }
+    },
+    "evolution": {
+      "type": "object",
+      "required": [
+        "troll_burned_raw",
+        "state",
+        "reward_weight_bps"
+      ],
+      "properties": {
+        "troll_burned_raw": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "state": {
+          "enum": [
+            "GENESIS",
+            "AWAKENED",
+            "CHARGED",
+            "RELIC",
+            "ASCENDED",
+            "LEGENDARY",
+            "OMEGA"
+          ]
+        },
+        "reward_weight_bps": {
+          "type": "integer",
+          "minimum": 10000,
+          "maximum": 50000
+        }
+      }
+    },
+    "vault": {
+      "type": "object",
+      "required": [
+        "address",
+        "assets"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "chain_id",
+              "contract",
+              "asset_class",
+              "amount_raw",
+              "decimals"
+            ],
+            "properties": {
+              "chain_id": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "contract": {
+                "type": "string"
+              },
+              "symbol": {
+                "type": "string"
+              },
+              "asset_class": {
+                "enum": [
+                  "TROLL",
+                  "STABLE",
+                  "GOLD",
+                  "SILVER",
+                  "OTHER"
+                ]
+              },
+              "amount_raw": {
+                "type": "string",
+                "pattern": "^[0-9]+$"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 36
+              }
+            }
+          }
+        }
+      }
+    },
+    "entitlements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "chain_id",
+          "contract",
+          "reference",
+          "amount_raw",
+          "manifest_hash"
+        ],
+        "properties": {
+          "chain_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "contract": {
+            "type": "string"
+          },
+          "reference": {
+            "type": "string"
+          },
+          "amount_raw": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "manifest_hash": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ownership": {
+      "type": "object",
+      "properties": {
+        "current_owner": {
+          "type": "string"
+        },
+        "mint_timestamp": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "holder_since": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "transfer_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "properties": {
+        "operating_account": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "policy_enabled": {
+          "type": "boolean"
+        },
+        "simulation_required": {
+          "type": "boolean"
+        },
+        "human_signature_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "stamps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "evidence_ref"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "evidence_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "chain_id",
+        "as_of_block"
+      ],
+      "properties": {
+        "chain_id": {
+          "type": "integer"
+        },
+        "as_of_block": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "snapshot_hash": {
+          "type": "string"
+        }
+      }
+    },
+    "disclaimer": {
+      "type": "string",
+      "const": "This passport describes verifiable protocol state. It does not guarantee market value, investment returns, yield, redemption rights, or stock ownership."
+    }
+  }
+}
