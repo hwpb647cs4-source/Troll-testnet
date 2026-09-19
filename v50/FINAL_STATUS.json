@@ -1,0 +1,20 @@
+{
+  "schema_version": "50.0.0",
+  "product": "TROLL NFT 2.0",
+  "phase": "FINALIZATION",
+  "feature_freeze": true,
+  "core_candidate": "V19",
+  "core_candidate_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "holder_mechanics": [
+    "5000_PERMANENT_NFTS",
+    "BURN_TROLL_TO_EVOLVE",
+    "EVOLUTION_CONTROLS_REWARD_WEIGHT",
+    "PERSISTENT_NFT_VAULT",
+    "VERIFIABLE_ACCUMULATION_HISTORY",
+    "HISTORY_PERSISTS_THROUGH_TRANSFER",
+    "VALUE_PASSPORT"
+  ],
+  "new_feature_development": "STOPPED_UNTIL_LAUNCH_READINESS",
+  "release_mode": "NO_MAINNET_BROADCAST",
+  "next_work_category": "CLOSE_EXISTING_RELEASE_GATES_ONLY"
+}
