@@ -1,0 +1,51 @@
+{
+  "schema_version": "28.0.0",
+  "epoch_id": "EXAMPLE_TESTNET_E1",
+  "status": "HISTORICAL_PROOF",
+  "chain_id": 46630,
+  "manifest_hash": "REPLACE_WITH_HASH",
+  "funding_source": "TESTNET_ONLY",
+  "eligibility_rule": "V14 proof token #0001",
+  "allocations": [
+    {
+      "token_id": 1,
+      "asset_contract": "TESTNET_TUSD",
+      "symbol": "tUSD",
+      "asset_class": "STABLE",
+      "label": "HISTORICAL_PROOF",
+      "amount_raw": "1000000000",
+      "decimals": 6,
+      "evidence_ref": "V14_FULL_TESTNET_PROOF"
+    },
+    {
+      "token_id": 1,
+      "asset_contract": "TESTNET_TGOLD",
+      "symbol": "tGOLD",
+      "asset_class": "GOLD",
+      "label": "HISTORICAL_PROOF",
+      "amount_raw": "100000000000000000",
+      "decimals": 18,
+      "evidence_ref": "V14_FULL_TESTNET_PROOF"
+    },
+    {
+      "token_id": 1,
+      "asset_contract": "TESTNET_TSILVER",
+      "symbol": "tSILVER",
+      "asset_class": "SILVER",
+      "label": "HISTORICAL_PROOF",
+      "amount_raw": "2500000000000000000",
+      "decimals": 18,
+      "evidence_ref": "V14_FULL_TESTNET_PROOF"
+    },
+    {
+      "token_id": 1,
+      "asset_contract": "TESTNET_TNVDA",
+      "symbol": "tNVDA",
+      "asset_class": "STOCK",
+      "label": "REGULATED_ENTITLEMENT",
+      "amount_raw": "5000000000000000000",
+      "decimals": 18,
+      "evidence_ref": "V14_FULL_TESTNET_PROOF"
+    }
+  ]
+}
