@@ -1,0 +1,29 @@
+name: TROLL V24 Passport SDK/API CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sdk-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm reviewed V19 source remains unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate V24 SDK syntax
+        run: node --check v24/sdk/troll-passport-sdk.mjs
+      - name: Validate data-label registry
+        run: |
+          node -e 'const x=require("./v24/data-labels.json"); if(x.labels.length!==4) process.exit(1); console.log("PASS labels",x.labels.map(v=>v.id).join(","))'
+      - name: Confirm read-only product layer
+        run: |
+          test ! -d v24/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction\|eth_requestAccounts\|private key" v24/sdk v24/docs
+          echo "PASS — V24 is read-only"
