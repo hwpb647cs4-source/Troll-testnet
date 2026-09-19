@@ -1,0 +1,28 @@
+name: TROLL V45 Holder Safety CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  holder-safety:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Holder safety tests
+        run: |
+          node --check v45/safety/holder-safety.mjs
+          node v45/test/holder-safety.test.mjs
+      - name: Confirm no signer/broadcast
+        run: |
+          test ! -d v45/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction\|signTransaction\|new ethers.Wallet" v45/safety
+          echo "PASS — V45 inspection only"
