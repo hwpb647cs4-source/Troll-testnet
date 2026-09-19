@@ -222,6 +222,19 @@ async function waitTx(label,tx){
   log("✓ "+label+"\n"+txUrl(r.hash));
   return r;
 }
+async function waitForOwner(nft,tokenId,target,timeoutMs=30000){
+  const want=target.toLowerCase();
+  const start=Date.now();
+  let last="";
+  while(Date.now()-start<timeoutMs){
+    try{
+      last=(await nft.ownerOf(tokenId)).toLowerCase();
+      if(last===want)return last;
+    }catch{}
+    await new Promise(r=>setTimeout(r,1200));
+  }
+  throw new Error("Owner state did not converge to Wallet B within timeout. Last owner: "+last);
+}
 function updateButtons(){
   $("deployBatcher").disabled=!(account&&build)||!!batcher;
   $("deployStack").disabled=!(account&&build&&batcher);
@@ -411,6 +424,7 @@ async function runProof(){
     let owner=await nft.ownerOf(1);
     if(owner.toLowerCase()===account.toLowerCase()){
       await waitTx("Transfer Genesis #0001 A → B",await nft.transferFrom(account,receiver,1));
+      await waitForOwner(nft,1,receiver);
     }else if(owner.toLowerCase()===receiver.toLowerCase()){
       log("SKIP transfer — Wallet B already owns #0001");
     }else throw new Error("Token #1 owner is neither Wallet A nor Wallet B");
@@ -510,6 +524,7 @@ async function retryFinalTransfer(){
     await waitTx("FINAL RETRY: Transfer Genesis #0001 A → B",
       await nft.transferFrom(account,receiver,1)
     );
+    await waitForOwner(nft,1,receiver);
   }
 
   const ownerAfter=await nft.ownerOf(1);
