@@ -1,0 +1,28 @@
+name: TROLL V35 Treasury Transparency CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  treasury:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Treasury accounting tests
+        run: |
+          node --check v35/ledger/treasury.mjs
+          node v35/test/treasury.test.mjs
+      - name: Policy checks
+        run: |
+          grep -q "NO_FLOOR_VALUE_AS_REVENUE" v35/transparency-policy.json
+          grep -q "wash volume" v35/docs/TREASURY_TRANSPARENCY.md
+          test ! -d v35/contracts
