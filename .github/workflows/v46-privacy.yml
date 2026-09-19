@@ -1,0 +1,28 @@
+name: TROLL V46 Privacy Minimization CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Privacy tests
+        run: |
+          node --check v46/privacy/minimization.mjs
+          node v46/test/privacy.test.mjs
+      - name: Confirm no contract/signing surface
+        run: |
+          test ! -d v46/contracts
+          ! grep -R "eth_sendTransaction\|eth_sendRawTransaction" v46/privacy
+          echo "PASS — V46 minimization only"
