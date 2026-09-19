@@ -1,0 +1,43 @@
+{
+  "version": "16.0.0",
+  "mode": "TEMPLATE_ONLY_DO_NOT_BROADCAST",
+  "audit_target_commit": "5b5b9ce5bfa1d97ee2500234411648f49c11a71f",
+  "network": {
+    "name": "Robinhood Chain",
+    "chain_id": 4663,
+    "rpc_env": "RH_RPC_URL",
+    "explorer": "https://robinhoodchain.blockscout.com",
+    "native_gas": "ETH"
+  },
+  "roles": {
+    "deployer": "REPLACE_WITH_HARDWARE_BACKED_DEPLOYER",
+    "admin_multisig": "REPLACE_WITH_MULTISIG",
+    "mint_controller": "REPLACE_WITH_MINT_CONTROLLER",
+    "royalty_receiver": "REPLACE_WITH_MULTISIG",
+    "regulated_entitlement_admin": "REPLACE_WITH_MULTISIG",
+    "snapshot_publisher": "REPLACE_WITH_MULTISIG"
+  },
+  "contracts": {
+    "genesis_nft": null,
+    "evolution_engine": null,
+    "vault_factory": null,
+    "metadata_router": null,
+    "asset_registry": null,
+    "reward_router": null,
+    "lens": null,
+    "snapshot_anchor": null
+  },
+  "assets": [],
+  "gates": {
+    "independent_security_review": false,
+    "exact_commit_frozen": false,
+    "production_metadata_cids_frozen": false,
+    "multisig_signers_verified": false,
+    "mint_controller_plan_verified": false,
+    "exact_asset_allowlist_verified": false,
+    "regulated_settlement_path_verified": false,
+    "source_verification_rehearsed": false,
+    "rollback_incident_plan_reviewed": false,
+    "final_mainnet_authorization": false
+  }
+}
