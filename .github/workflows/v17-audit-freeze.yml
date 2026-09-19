@@ -1,0 +1,66 @@
+name: TROLL V17 Audit Freeze CI
+
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: v15/package.json
+
+      - name: Verify audited V15 source tree is unchanged
+        run: |
+          git diff --exit-code             5b5b9ce5bfa1d97ee2500234411648f49c11a71f             -- v15/
+
+      - name: Install exact V15 dependencies
+        working-directory: v15
+        run: npm install --no-audit --no-fund
+
+      - name: Run V15 static security invariants
+        working-directory: v15
+        run: npm run validate:static
+
+      - name: Compile exact V15 audit target
+        working-directory: v15
+        run: npm run compile
+
+      - name: Run V15 adversarial security suite
+        working-directory: v15
+        run: npm test
+
+      - name: Generate reproducible audit build manifest
+        run: node v17/scripts/generate-build-manifest.cjs
+
+      - name: Build reviewer bundle
+        run: node v17/scripts/build-audit-bundle.cjs
+
+      - name: Upload audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: TROLL-V17-AUDIT-EVIDENCE
+          path: |
+            v17/generated/AUDIT_BUILD_MANIFEST.json
+            v17/generated/audit-bundle
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Confirm release remains blocked
+        run: |
+          grep -q "NO MAINNET BROADCAST" v17/docs/RELEASE_GATE.md
+          grep -q '"release_state": "AUDIT_FREEZE_NO_BROADCAST"' v17/AUDIT_TARGET.json
+          echo "PASS — release remains blocked"
