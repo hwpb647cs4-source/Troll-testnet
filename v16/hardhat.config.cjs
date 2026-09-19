@@ -27,7 +27,7 @@ module.exports = {
     settings: { optimizer: { enabled: true, runs: 200 } }
   },
   paths: {
-    sources: "../v15/contracts",
+    sources: "./contracts",
     tests: "./test",
     cache: "./cache",
     artifacts: "./artifacts"
