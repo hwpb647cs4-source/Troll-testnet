@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "proof_type": "FROZEN_V19_ROBINHOOD_TESTNET_REHEARSAL",
+  "status": "PASS",
+  "chain_id": 46630,
+  "frozen_source_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "observed": {
+    "owner_after_transfer": "0xdc2f1175f73e474f673717bc91583865cb3db074",
+    "family": 5,
+    "cumulative_troll_burn": "175000.0",
+    "evolution_state": 4,
+    "reward_weight": "2.00x",
+    "persistent_vault": "0xda008524957253eE091B11b87b88c9C03B324d9b"
+  },
+  "contracts": {
+    "tTROLL": "0x5F7958F8d05b54864fEcF744259c4d0Ec2B53603",
+    "tUSD": "0x59B52b973758b66A6429609054152700bD7dA411",
+    "tGOLD": "0x72650B6a11617D579136EF02e3c288dD7F1D0939",
+    "tSILVER": "0x529642d8d2B67C74f7251d2ba623fE3c1cAE7426",
+    "tNVDA": "0xF23638a2A7DbAeE53D83666379e3a77652255963",
+    "TrollInHoodGenesisV19": "0x63713B946b22EBD0A8B2B3200f271139C4671f1cC",
+    "TrollEvolutionEngineV19": "0x520a3e074616866f1E24669fF56D6d18e4fb6365",
+    "TrollMetadataRouterV19": "0x53BCE9856350c2D67a95679382409b00Fd126Ed1",
+    "TrollBoundVaultFactoryV19": "0xFa353E4Fab322c091E55746AD114054ea51Ff75c",
+    "TrollAssetRegistryV19": "0x005be3894b0fFB4A3BfD4e1CFEFBB7545A7077b4",
+    "TrollRewardRouterV19": "0x38845740FBdA6693935D845795B1a006d998bD32",
+    "TrollLensV19": "0x8a355A576Aa877ABCE87D763F72c363Cdaad5A0a",
+    "TrollAssetSnapshotAnchorV19": "0x20aE62616Afd7dF804c55e560c552BBd1939eEA6"
+  },
+  "transfer": {
+    "token_id": 1,
+    "from": "0x745b9b869900b2d8c2742dd9361cba88eb133c15",
+    "to": "0xdc2f1175f73e474f673717bc91583865cb3db074",
+    "transaction_hash": "0x6045acb0a6732a410e08cf9b5e445a0168abe650ac08485ded901e7d3b7b931d",
+    "explorer": "https://explorer.testnet.chain.robinhood.com/tx/0x6045acb0a6732a410e08cf9b5e445a0168abe650ac08485ded901e7d3b7b931d"
+  },
+  "acceptance": [
+    "FROZEN_V19_BUILD_LOADED",
+    "STACK_DEPLOYED",
+    "FAMILY_5_VERIFIED",
+    "TROLL_BURN_175000",
+    "EVOLUTION_STATE_4",
+    "REWARD_WEIGHT_2X",
+    "PERSISTENT_VAULT_PRESENT",
+    "TEST_ASSET_ACCUMULATION_EXECUTED",
+    "TEST_REGULATED_ENTITLEMENT_RECORDED",
+    "A_TO_B_PERSISTENCE_VERIFIED"
+  ],
+  "note": "Observed from the final V19 Robinhood Chain Testnet deployment rehearsal. This is testnet evidence only and does not authorize mainnet."
+}
