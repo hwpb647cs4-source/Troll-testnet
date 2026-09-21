@@ -1,0 +1,44 @@
+{
+  "schema_version": "internal-audit-1.0",
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "status": "INTERNAL_REVIEW_COMPLETE_EXTERNAL_REVIEW_REQUIRED",
+  "findings": [
+    {
+      "id": "IA-01",
+      "severity": "HIGH",
+      "category": "DESIGN_RISK",
+      "title": "Passive vault has no asset withdrawal/execution path",
+      "status": "RESOLVED_DESIGN_INTENT_PENDING_EXTERNAL_VERIFICATION",
+      "disposition": "Permanent passive accumulation vault is intentional. Do not add holder withdrawal/sweep/arbitrary-execute path. Product language must disclose non-withdrawable permanent NFT-bound accumulation semantics."
+    },
+    {
+      "id": "IA-02",
+      "severity": "MEDIUM",
+      "category": "CONFIGURATION",
+      "title": "Regulated entitlement path lacks local chain-ID invariant",
+      "status": "OPEN_EXTERNAL_REVIEW"
+    },
+    {
+      "id": "IA-03",
+      "severity": "MEDIUM",
+      "category": "ADMIN_INTEGRITY",
+      "title": "Asset registry entries are overwriteable",
+      "status": "OPEN_EXTERNAL_REVIEW"
+    },
+    {
+      "id": "IA-04",
+      "severity": "LOW",
+      "category": "DATA_INTEGRITY",
+      "title": "Privileged evidence writes can target nonexistent/future token IDs",
+      "status": "OPEN_EXTERNAL_REVIEW"
+    },
+    {
+      "id": "IA-05",
+      "severity": "INFORMATIONAL",
+      "category": "TOKENOMICS_SEMANTICS",
+      "title": "Burn accounting is transfer to immutable dead address, not ERC20 supply burn",
+      "status": "DISCLOSURE_REQUIRED"
+    }
+  ],
+  "mainnet_release": "BLOCKED"
+}

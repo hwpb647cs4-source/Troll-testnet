@@ -1,0 +1,40 @@
+{
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "review_model": "FIVE_SEQUENTIAL_INTERNAL_PASSES",
+  "independent_auditors": 0,
+  "passes": [
+    {
+      "pass": 1,
+      "name": "ACCESS_CONTROL_CONFIGURATION",
+      "status": "READY"
+    },
+    {
+      "pass": 2,
+      "name": "ASSET_ACCOUNTING_ECONOMIC_INVARIANTS",
+      "status": "READY"
+    },
+    {
+      "pass": 3,
+      "name": "REENTRANCY_CALLBACKS_HOSTILE_ASSETS",
+      "status": "READY"
+    },
+    {
+      "pass": 4,
+      "name": "STATE_METADATA_EVIDENCE_INTEGRITY",
+      "status": "READY"
+    },
+    {
+      "pass": 5,
+      "name": "DEPLOYMENT_ADMIN_MAINNET_THREAT_MODEL",
+      "status": "READY"
+    }
+  ],
+  "inherited_findings": [
+    "IA-01",
+    "IA-02",
+    "IA-03",
+    "IA-04",
+    "IA-05"
+  ],
+  "mainnet_release": "BLOCKED"
+}
