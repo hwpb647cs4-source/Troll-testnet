@@ -1,0 +1,10 @@
+const assert=require("assert");const fs=require("fs");const src=fs.readFileSync("v19/contracts/TrollProductionCandidateV19.sol","utf8");
+function has(x){return src.includes(x)}
+describe("V19 five-pass internal audit adversarial invariants",function(){
+ it("A1 core configuration freeze has one-way guards",function(){for(const x of["if (mintControllerFrozen) revert Frozen()","if (evolutionEngineFrozen) revert Frozen()","if (metadataRouterFrozen) revert Frozen()","if (mintControllerFrozen || evolutionEngineFrozen || metadataRouterFrozen) revert Frozen()"])assert.ok(has(x),x)});
+ it("A2 evolution requires NFT owner and actual dead-address credit",function(){for(const x of['require(nft.ownerOf(tokenId) == msg.sender, "not owner")',"uint256 beforeBal = troll.balanceOf(deadAddress)","uint256 credited = troll.balanceOf(deadAddress) - beforeBal",'require(credited > 0, "zero credit")'])assert.ok(has(x),x)});
+ it("A3 direct reward route is local-chain and actual-credit accounting",function(){for(const x of['require(a.chainId == block.chainid, "wrong chain")','require(a.lane == TrollAssetRegistryV19.Lane.DIRECT_VAULT, "regulated lane")',"uint256 beforeBal = IERC20(a.token).balanceOf(vault)","uint256 credited = IERC20(a.token).balanceOf(vault) - beforeBal"])assert.ok(has(x),x)});
+ it("A4 regulated entitlement is privileged and lane-separated",function(){assert.ok(/function recordRegulatedEntitlement[\s\S]*?external onlyOwner/.test(src));assert.ok(has('require(a.lane == TrollAssetRegistryV19.Lane.REGULATED_ENTITLEMENT, "direct lane")'))});
+ it("A5 snapshot publication rejects future block state",function(){assert.ok(has('require(blockNumber <= block.number, "future block")'))});
+ it("A6 passive vault intentionally exposes no generic execution/withdrawal method",function(){const start=src.indexOf("contract TrollBoundVaultV19");const end=src.indexOf("contract TrollBoundVaultFactoryV19");const vault=src.slice(start,end);assert.equal(/function\s+(execute|withdraw|transferERC20|sweep)/.test(vault),false)});
+});
