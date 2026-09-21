@@ -1,4 +1,4 @@
-const assert=require("assert");const fs=require("fs");const src=fs.readFileSync("v19/contracts/TrollProductionCandidateV19.sol","utf8");
+const assert=require("assert");const fs=require("fs");const src=fs.readFileSync(require("path").join(__dirname,"../../v19/contracts/TrollProductionCandidateV19.sol"),"utf8");
 function has(x){return src.includes(x)}
 describe("V19 five-pass internal audit adversarial invariants",function(){
  it("A1 core configuration freeze has one-way guards",function(){for(const x of["if (mintControllerFrozen) revert Frozen()","if (evolutionEngineFrozen) revert Frozen()","if (metadataRouterFrozen) revert Frozen()","if (mintControllerFrozen || evolutionEngineFrozen || metadataRouterFrozen) revert Frozen()"])assert.ok(has(x),x)});
