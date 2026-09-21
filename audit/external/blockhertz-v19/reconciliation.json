@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "external_tool": "Blockhertz AI Auditor",
+  "external_summary": {
+    "risk_score": 25,
+    "risk_label": "LOW RISK",
+    "total": 16,
+    "medium": 1,
+    "low": 11,
+    "gas": 4
+  },
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "reconciled": 16,
+  "dispositions": {
+    "false_positive": [
+      "BH-01"
+    ],
+    "intentional_validation": [
+      "BH-02",
+      "BH-03",
+      "BH-04",
+      "BH-05"
+    ],
+    "accepted_admin_or_operational_risk": [
+      "BH-06",
+      "BH-08",
+      "BH-11",
+      "BH-12"
+    ],
+    "intentional_design": [
+      "BH-09",
+      "BH-10"
+    ],
+    "not_security_vulnerability": [
+      "BH-07",
+      "BH-14",
+      "BH-16"
+    ],
+    "required_security_accounting": [
+      "BH-15"
+    ],
+    "preserve_callback_safety_over_gas": [
+      "BH-13"
+    ]
+  },
+  "code_change_required_from_blockhertz": false,
+  "independent_human_audit_gate": "OPEN"
+}
