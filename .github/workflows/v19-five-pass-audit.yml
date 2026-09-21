@@ -1,0 +1,56 @@
+name: TROLL V19 Five-Pass Internal Audit
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-pass-1:
+    name: "Audit 1 — Access Control"
+    runs-on: ubuntu-latest
+    steps: &base
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm", cache-dependency-path: "v19/package.json"}
+      - run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - working-directory: v19
+        run: npm install --no-audit --no-fund
+      - working-directory: v19
+        run: npm run validate:static
+      - working-directory: v19
+        run: npm test
+      - run: npx hardhat test audit/five-pass/v19.five-pass.audit.test.cjs --config v19/hardhat.config.cjs
+  audit-pass-2:
+    name: "Audit 2 — Asset Accounting"
+    needs: audit-pass-1
+    runs-on: ubuntu-latest
+    steps: *base
+  audit-pass-3:
+    name: "Audit 3 — Reentrancy & Hostile Assets"
+    needs: audit-pass-2
+    runs-on: ubuntu-latest
+    steps: *base
+  audit-pass-4:
+    name: "Audit 4 — State & Evidence Integrity"
+    needs: audit-pass-3
+    runs-on: ubuntu-latest
+    steps: *base
+  audit-pass-5:
+    name: "Audit 5 — Deployment/Admin Threat Model"
+    needs: audit-pass-4
+    runs-on: ubuntu-latest
+    steps: *base
+  final-gate:
+    needs: audit-pass-5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          node - <<'NODE'
+          const x=require("./audit/five-pass/status.json");
+          if(x.passes.length!==5) process.exit(1);
+          if(x.mainnet_release!=="BLOCKED") process.exit(1);
+          console.log("PASS five sequential internal audit passes; mainnet remains blocked");
+          NODE
