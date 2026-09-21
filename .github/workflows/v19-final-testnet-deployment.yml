@@ -4,7 +4,7 @@ on:
     branches: ["main"]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   build-final-testnet:
     runs-on: ubuntu-latest
@@ -42,6 +42,18 @@ jobs:
           if(Object.keys(x.contracts).length!==9) process.exit(1);
           console.log("PASS frozen V19 deployment artifact");
           NODE
+      - name: Commit frozen browser artifact to deployment branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deploy/v19-testnet/compiled.json
+          if git diff --cached --quiet; then
+            echo "No compiled artifact changes"
+          else
+            git commit -m "Build frozen V19 testnet deployment artifact [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: TROLL-V19-FINAL-TESTNET-DEPLOYMENT
