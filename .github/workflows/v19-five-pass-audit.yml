@@ -21,7 +21,7 @@ jobs:
         run: npm run validate:static
       - working-directory: v19
         run: npm test
-      - run: npx hardhat test audit/five-pass/v19.five-pass.audit.test.cjs --config v19/hardhat.config.cjs
+      - run: cd v19 && npx hardhat test ../audit/five-pass/v19.five-pass.audit.test.cjs
   audit-pass-2:
     name: "Audit 2 — Asset Accounting"
     needs: audit-pass-1
