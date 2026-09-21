@@ -8,7 +8,8 @@
       "severity": "HIGH",
       "category": "DESIGN_RISK",
       "title": "Passive vault has no asset withdrawal/execution path",
-      "status": "OPEN_DECISION"
+      "status": "RESOLVED_DESIGN_INTENT_PENDING_EXTERNAL_VERIFICATION",
+      "disposition": "Permanent passive accumulation vault is intentional. Do not add holder withdrawal/sweep/arbitrary-execute path. Product language must disclose non-withdrawable permanent NFT-bound accumulation semantics."
     },
     {
       "id": "IA-02",
