@@ -1,12 +1,12 @@
-# MEI Growth — sales pilot 1.3
+# MEI Growth — sales pilot 1.4
 
-Scope: a small, read-only sales preview for one KitVende product. No payment provider, email, credential, invitation, financial or production-mode changes.
+Scope: a small, read-only sales preview for three KitVende pilot products. No payment provider, email, credential, invitation, financial or production-mode changes.
 
-- `/comecar/`: protected by existing staging login; three intentionally free samples with browser-only personalization.
+- `/comecar/`: protected by existing staging login; three intentionally free samples per pilot with browser-only personalization.
 - `/lancamento` and `/lancamento.json`: owner-only launch checklist. Configuration presence is not a payment/delivery test.
 - `/comecar/checkout`: always blocked. No payment redirect implemented in this preview.
 - Existing gateway code and routes are inherited unchanged. This is not an audit or security certification of that gateway.
-- Product: KitVende Essencial — Manicure; proposed R$59.90 one-time; 24 messages, 10 optional prompts, seven-day implementation plan, offline HTML personalizer, text fallbacks and guide.
+- Public pilots: Manicure, Confeiteira and Ar-condicionado; proposed R$59.90 one-time per kit. Nine additional kits are prepared offline and remain private pending validation of the first three.
 - Complete paid product is NOT in this repository or runtime. Deliver through the configured checkout provider only after buyer access is tested. Do not place private ZIPs on public GitHub/CDN.
 - Kiwify native members-area delivery is the proposed first-sale path, not an integration completed in this change.
 
