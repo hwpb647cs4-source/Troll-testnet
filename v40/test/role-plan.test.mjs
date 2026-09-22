@@ -1,7 +1,0 @@
-import assert from"node:assert/strict";import{validateRolePlan,ceremonyChecklist}from"../roles/role-plan.mjs";
-const A="0x1111111111111111111111111111111111111111",B="0x2222222222222222222222222222222222222222",C="0x3333333333333333333333333333333333333333",D="0x4444444444444444444444444444444444444444",E="0x5555555555555555555555555555555555555555",F="0x6666666666666666666666666666666666666666";
-const p={chain_id:4663,roles:{DEPLOYER:{address:A,status:"VERIFIED",evidence_ref:"ceremony:1",type:"EOA"},ADMIN_MULTISIG:{address:B,status:"VERIFIED",evidence_ref:"ceremony:2",type:"MULTISIG",threshold:2,signers:[A,C,D]},MINT_CONTROLLER:{address:C,status:"VERIFIED",evidence_ref:"ceremony:3"},ROYALTY_RECEIVER:{address:D,status:"VERIFIED",evidence_ref:"ceremony:4"},ENTITLEMENT_ADMIN:{address:E,status:"VERIFIED",evidence_ref:"ceremony:5"},SNAPSHOT_PUBLISHER:{address:F,status:"VERIFIED",evidence_ref:"ceremony:6"}}};
-assert.equal(validateRolePlan(p).valid,true);assert.equal(ceremonyChecklist(p).ready,true);
-assert.equal(validateRolePlan({...p,chain_id:46630}).valid,false);
-const bad=structuredClone(p);bad.roles.ADMIN_MULTISIG.threshold=1;assert.equal(validateRolePlan(bad).valid,false);
-console.log("V40 PRODUCTION ROLE CEREMONY PASS");

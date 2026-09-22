@@ -1,9 +1,0 @@
-{
-  "name": "TROLL NFT 2.0 Command Center",
-  "short_name": "TROLL Ops",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#040806",
-  "theme_color": "#07110d",
-  "description": "Read-only mobile operations cockpit for TROLL NFT 2.0."
-}

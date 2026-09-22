@@ -1,1 +1,0 @@
-{"name":"troll-v26-event-indexer","private":true,"version":"26.0.0","type":"module","scripts":{"test":"node test/indexer.test.mjs"},"dependencies":{"ethers":"6.13.4"}}
