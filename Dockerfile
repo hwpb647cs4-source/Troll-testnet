@@ -32,7 +32,10 @@ for p in root.iterdir():
     else:
         shutil.copy2(p, target)
 PY
-COPY gateway_override.py /app/railway/gateway.py
+COPY gateway_override.py /app/railway/gateway_base.py
+COPY sales_preview.py /app/railway/gateway.py
+COPY sales_public/index.html /app/sales_public/index.html
+RUN python -m py_compile /app/railway/gateway.py /app/railway/gateway_base.py
 RUN groupadd -g 10001 app \
  && useradd -u 10001 -g 10001 -M -s /usr/sbin/nologin app \
  && mkdir -p /data \
