@@ -11,18 +11,13 @@ from pathlib import Path
 import runpy
 from urllib.parse import urlsplit
 
-VERSION = 'sales-pilot-1.3'
-PRODUCT = {
-    'id': 'manicure_essencial_v1',
-    'name': 'KitVende Essencial — Manicure',
-    'price_cents_proposed': 5990,
-    'messages': 24,
-    'optional_ai_prompts': 10,
-    'implementation_days': 7,
-    'billing': 'one_time',
-    'delivery_plan': 'Kiwify native members area; not configured',
-}
-
+VERSION = 'sales-pilot-1.4'
+PILOTS = [
+    {'id':'manicure','name':'KitVende Essencial — Manicure','price_cents_proposed':5990},
+    {'id':'confeiteira','name':'KitVende Essencial — Confeiteira','price_cents_proposed':5990},
+    {'id':'ar_condicionado','name':'KitVende Essencial — Ar-condicionado','price_cents_proposed':5990},
+]
+OFFLINE_READY = 9
 
 def read_json(path: Path) -> dict:
     try:
@@ -43,7 +38,7 @@ def launch_report(root: Path) -> dict:
     configured = sum(isinstance(v, str) and v.startswith('https://') for v in links.values())
     return {
         'version': VERSION, 'sales_ready': False, 'commerce_enabled': False,
-        'checkout_redirect_enabled': False, 'product': PRODUCT,
+        'checkout_redirect_enabled': False, 'pilots': PILOTS, 'offline_ready_count': OFFLINE_READY,
         'configuration_observed': {
             'supplier_name_present': bool(str(site.get('legal_name') or '').strip()),
             'support_email_present': bool(str(site.get('support_email') or '').strip()),
@@ -51,7 +46,7 @@ def launch_report(root: Path) -> dict:
             'existing_catalog_https_links': configured,
         },
         'pilot': {
-            'public_sample_messages': 3,
+            'public_sample_messages_per_pilot': 3,
             'private_package_on_server': False,
             'payment_provider_setup_verified': False,
             'buyer_delivery_verified': False,
@@ -59,8 +54,8 @@ def launch_report(root: Path) -> dict:
         },
         'remaining': [
             'Finalizar identificação do fornecedor, suporte e políticas comerciais.',
-            'Cadastrar o produto piloto na Kiwify e conferir preço e link de checkout.',
-            'Enviar o pacote privado à área de membros; testar acesso como compradora.',
+            'Cadastrar os 3 produtos piloto na Kiwify e conferir preço e links de checkout.',
+            'Enviar cada pacote privado correto à área de membros; testar acesso como compradora.',
             'Validar compra, entrega e procedimento de reembolso antes de liberar vendas.',
             'Revisar segurança e acesso do ambiente antes da abertura pública.',
         ],
@@ -75,7 +70,7 @@ def readme_html(report: dict) -> str:
     rows = ''.join('<tr><th>'+e(k)+'</th><td>'+e(v)+'</td></tr>' for k,v in [
         ('Fornecedor', state(conf['supplier_name_present'])),
         ('Suporte', state(conf['support_email_present'])),
-        ('Produto piloto na Kiwify', 'Não verificado'),
+        ('3 produtos piloto na Kiwify', 'Não verificados'),
         ('Entrega à compradora', 'Não testada no provedor'),
         ('Reembolso', 'Não testado no provedor'),
         ('Cobrança nesta prévia', 'Desligada'),
@@ -83,7 +78,7 @@ def readme_html(report: dict) -> str:
     tasks = ''.join('<li>'+e(x)+'</li>' for x in report['remaining'])
     return f'''<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lançamento — MEI Growth</title><style>
 body{{font:16px/1.6 system-ui;margin:0;background:#f6f7f2;color:#20362c}}main{{max-width:850px;margin:auto;padding:30px 22px}}.card{{background:white;border:1px solid #dce4db;border-radius:14px;padding:24px;margin:18px 0}}a{{color:#245c42}}table{{width:100%;border-collapse:collapse}}th,td{{text-align:left;border-bottom:1px solid #dce4db;padding:12px 6px}}th{{width:38%}}h1{{line-height:1.15}}li{{margin:8px 0}}small{{color:#5b6e63}}
-</style></head><body><main><a href="/comecar/">← Ver prévia comercial</a><h1>Um produto para a primeira venda.</h1><p>Painel interno. Não há compras liberadas.</p><section class="card"><h2>{e(PRODUCT['name'])}</h2><p>Preço proposto: <strong>R$ 59,90</strong> · Pagamento único.</p><p>24 mensagens, personalizador offline, 10 prompts opcionais, plano de sete dias e guia de uso. Os demais módulos do MEI Growth não estão incluídos.</p><table>{rows}</table></section><section class="card"><h2>O que falta</h2><ol>{tasks}</ol><p>Para reduzir a operação inicial, a entrega planejada é pela própria área de membros da Kiwify. O pacote pago deve ser enviado ao provedor, nunca a uma página ou repositório público.</p></section><section class="card"><h2>Texto para cadastro do produto</h2><p>Kit digital para manicures e nail designers organizarem primeiro contato, orçamento, confirmação, reagendamento, pós-atendimento e retorno. Inclui 24 mensagens editáveis, personalizador HTML offline, arquivos de texto, 10 prompts opcionais de IA e plano de sete dias. Não inclui disparos automáticos, conta de IA ou CRM hospedado. Não garante clientes, renda ou agenda cheia.</p></section><small>{e(report['note'])} · {VERSION}</small></main></body></html>'''
+</style></head><body><main><a href="/comecar/">← Ver prévia comercial</a><h1>Três produtos prontos para a primeira rodada de vendas.</h1><p>Painel interno. Não há compras liberadas.</p><section class="card"><h2>Pilotos públicos</h2><p><strong>Manicure · Confeiteira · Ar-condicionado</strong></p><p>Preço piloto proposto: <strong>R$ 59,90 por kit</strong> · pagamento único.</p><p>Cada kit inclui 24 mensagens, personalizador offline, 10 prompts opcionais, plano de sete dias e guia de uso. Há mais 9 kits prontos offline aguardando validação dos três primeiros.</p><table>{rows}</table></section><section class="card"><h2>O que falta</h2><ol>{tasks}</ol><p>Para reduzir a operação inicial, a entrega planejada é pela própria área de membros da Kiwify. O pacote pago deve ser enviado ao provedor, nunca a uma página ou repositório público.</p></section><section class="card"><h2>Texto para cadastro do produto</h2><p>Cadastre separadamente os três pilotos: Manicure, Confeiteira e Ar-condicionado. Cada produto é um kit digital específico da profissão para organizar primeiro contato, orçamento, confirmação, mudanças, pós-venda e retorno. Inclui 24 mensagens editáveis, personalizador HTML offline, arquivos de texto, 10 prompts opcionais de IA e plano de sete dias. Não inclui disparos automáticos, conta de IA ou CRM hospedado. Não garante clientes, renda ou agenda cheia.</p></section><small>{e(report['note'])} · {VERSION}</small></main></body></html>'''
 
 
 def install(ns: dict, root: Path | None = None):
@@ -91,7 +86,7 @@ def install(ns: dict, root: Path | None = None):
     original = ns['H']
     root = Path(root or ns['ROOT'])
     class PilotHandler(original):
-        server_version = 'MEIGrowthGateway/1.2+sales1.3'
+        server_version = 'MEIGrowthGateway/1.2+sales1.4'
 
         def _pilot_send(self, status: int, payload: bytes, content_type: str):
             self.send_response(status)
