@@ -24,6 +24,24 @@
       "text": "TROLL is not yet authorized for production mainnet deployment.",
       "evidence_class": "REFERENCE_ONLY",
       "evidence_ref": "v32/release-manifest.json"
+    },
+    {
+      "id": "V19_PASSIVE_VAULT_CUSTODY",
+      "text": "The frozen V19 vault has no asset withdrawal, redemption, recovery, approval or execution function for either the NFT holder or project administrators. Transferring the NFT does not unlock its vault assets.",
+      "evidence_class": "REFERENCE_ONLY",
+      "evidence_ref": "V19 c3750b9458156e962393059f78c92e79802bf622: TrollBoundVaultV19; audit/internal-v19/INTERNAL_AUDIT_REPORT.md"
+    },
+    {
+      "id": "V19_REWARD_WEIGHT_LIMIT",
+      "text": "V19 exposes a burn-based reward weight; it does not calculate or guarantee funded distributions.",
+      "evidence_class": "REFERENCE_ONLY",
+      "evidence_ref": "V19 c3750b9458156e962393059f78c92e79802bf622: TrollEvolutionEngineV19.rewardWeightBps / TrollRewardRouterV19"
+    },
+    {
+      "id": "V19_REGULATED_LANE_LIMIT",
+      "text": "V19's regulated lane records administrator-supplied amounts and manifest hashes; it does not transfer stock tokens or execute settlement.",
+      "evidence_class": "REFERENCE_ONLY",
+      "evidence_ref": "V19 c3750b9458156e962393059f78c92e79802bf622: TrollRewardRouterV19.recordRegulatedEntitlement"
     }
   ],
   "prohibited_marketing": [

@@ -31,6 +31,20 @@
       "fix_commit": "c3750b9458156e962393059f78c92e79802bf622",
       "reviewer_verification": "Malicious receiver regression + Slither rerun",
       "abi_storage_semantic_impact": "Mint callback ordering hardened."
+    },
+    {
+      "id": "IA-01",
+      "source": "MANUAL_REVIEW",
+      "severity": "HIGH",
+      "status": "TRIAGED",
+      "title": "Permanent passive-vault custody requires independent verification and disclosure",
+      "affected_surface": "TrollBoundVaultV19",
+      "description": "Permanent accumulation is the recorded product intent. V19 provides no holder/admin withdrawal, approval, execution or recovery path. Design intent does not close external review.",
+      "reproduction": "Inspect the frozen vault/factory and reward router at c3750b9458156e962393059f78c92e79802bf622. Deposited ERC20/ERC721/ERC1155 assets have no V19 exit; NFT ownership transfer does not unlock them. See audit/internal-v19/INTERNAL_AUDIT_REPORT.md for verification and self-lock scenarios.",
+      "remediation": "Preserve the recorded passive-vault decision; publish holder disclosures and obtain the independent verification evidence specified in audit/internal-v19/INTERNAL_AUDIT_REPORT.md. Do not use ACCEPTED_RISK or CLOSED_VERIFIED without policy-compliant evidence.",
+      "fix_commit": null,
+      "reviewer_verification": null,
+      "abi_storage_semantic_impact": "NONE: documentation and tracking only; frozen V19 remains unchanged."
     }
   ]
 }
