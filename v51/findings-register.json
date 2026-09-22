@@ -1,0 +1,37 @@
+{
+  "scope": "V51 candidate only; does not resolve frozen V19 findings",
+  "release_status": "NO_MAINNET_BROADCAST",
+  "independent_review_complete": false,
+  "findings": [
+    {
+      "id": "IA-01",
+      "severity": "HIGH",
+      "status": "TRIAGED",
+      "disposition": "Permanent custody retained; destination guards added. Human verification and holder disclosure remain required."
+    },
+    {
+      "id": "IA-02",
+      "severity": "MEDIUM",
+      "status": "FIX_READY_FOR_REVIEW",
+      "disposition": "Regulated records now require local chain ID."
+    },
+    {
+      "id": "IA-03",
+      "severity": "MEDIUM",
+      "status": "FIX_READY_FOR_REVIEW",
+      "disposition": "Asset identity is append-only; enable/disable is separate and evented."
+    },
+    {
+      "id": "IA-04",
+      "severity": "LOW",
+      "status": "FIX_READY_FOR_REVIEW",
+      "disposition": "NFT existence enforced for vault creation, deposits, entitlement records and snapshots."
+    },
+    {
+      "id": "IA-05",
+      "severity": "INFORMATIONAL",
+      "status": "TRIAGED",
+      "disposition": "Dead-address transfer is not ERC20 totalSupply reduction; disclosure retained."
+    }
+  ]
+}
