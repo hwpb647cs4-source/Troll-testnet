@@ -5,7 +5,7 @@
   "expected_chain_id": 4663,
   "contract_address": "0x2a13008CC2F5A853F6Fb21cbD90841806C64b247",
   "designation": "USER_CONFIRMED_CANONICAL_TROLL",
-  "verification_status": "PENDING_ONCHAIN_CONTRACT_VERIFICATION",
+  "verification_status": "ONCHAIN_VERIFIED_BLOCKSCOUT",
   "deployment_binding": {
     "contract": "TrollEvolutionEngineV19",
     "constructor_parameter": "troll_",
@@ -16,5 +16,27 @@
     "value": "0x000000000000000000000000000000000000dEaD",
     "status": "UNCHANGED_UNLESS_SEPARATELY_AUTHORIZED"
   },
-  "note": "This address is the canonical TROLL ERC-20 token contract for the production burn/evolution mechanism. It is not the burn destination."
+  "note": "User-confirmed canonical TROLL contract, independently verified on Robinhood Chain mainnet via Blockscout. V19 still uses this token via transferFrom to its configured dead-address sink; switching to native burn()/burnFrom() would be a contract change and require a new review target.",
+  "onchain_verification": {
+    "chain_id": 4663,
+    "address": "0x2a13008CC2F5A853F6Fb21cbD90841806C64b247",
+    "is_contract": true,
+    "is_verified_source": true,
+    "proxy_type": null,
+    "contract_name": "CTOMigrationToken",
+    "token_name": "Troll in Hood",
+    "symbol": "TROLL",
+    "decimals": 18,
+    "token_type": "ERC-20",
+    "holders_count_observed": 245,
+    "total_supply_raw_observed": "95920596755559808094010602",
+    "creation_transaction_hash": "0x375a88c03bd576ed0351bf995148822d66ea245bcb7383be64ba97320bce541f",
+    "first_transaction_timestamp": "2026-09-28T06:20:11Z",
+    "burn_functions_present": [
+      "burn(uint256)",
+      "burnFrom(address,uint256)"
+    ],
+    "evidence_source": "Blockscout Robinhood Chain (chain 4663)",
+    "verified_at": "2026-09-28"
+  }
 }
