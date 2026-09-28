@@ -1,0 +1,12 @@
+const assert=require("assert");
+const x=require("../safe-preflight.json");
+assert.equal(x.chain_id,4663);
+assert.equal(x.safe_version,"1.4.1");
+assert.equal(x.production_safe.threshold,2);
+assert.equal(x.production_safe.owners.length,3);
+assert.equal(x.production_safe.status,"OWNERS_NOT_CONFIGURED");
+assert.equal(x.canonical_contracts.proxy_factory,"0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67");
+assert.equal(x.canonical_contracts.safe_l2_singleton,"0x29fcB43b46531BcA003ddC8FCB67FFE91900C762");
+assert.equal(x.canonical_contracts.compatibility_fallback_handler,"0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99");
+assert.equal(x.release_gate,"PRODUCTION_MULTISIG_OPEN_UNTIL_SAFE_CREATED_AND_VERIFIED");
+console.log("PRODUCTION SAFE MULTISIG PREFLIGHT PASS");

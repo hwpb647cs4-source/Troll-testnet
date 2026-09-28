@@ -1,0 +1,30 @@
+name: Production Safe Multisig Preflight CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  safe-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate Safe canonical deployment preflight
+        run: node production/multisig/test/safe-preflight.test.cjs
+      - name: Confirm signer placeholders remain
+        run: |
+          node - <<'NODE'
+          const x=require("./production/multisig/safe-preflight.json");
+          if(x.production_safe.status!=="OWNERS_NOT_CONFIGURED") process.exit(1);
+          if(!x.production_safe.owners.every(v=>v.startsWith("REPLACE_WITH_"))) process.exit(1);
+          if(x.production_safe.address!==null) process.exit(1);
+          console.log("PASS — Safe infrastructure verified, signer ceremony still required");
+          NODE

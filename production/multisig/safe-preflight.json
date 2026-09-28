@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0.0",
+  "chain_id": 4663,
+  "network": "Robinhood Chain",
+  "safe_version": "1.4.1",
+  "safe_deployments_source": "safe-global/safe-deployments",
+  "canonical_contracts": {
+    "proxy_factory": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+    "safe_l2_singleton": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+    "compatibility_fallback_handler": "0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99",
+    "multi_send": "0x38869bf66a61cF6bDB996A6aE40D5853Fd43B526"
+  },
+  "verification": {
+    "safe_deployments_registry_4663": "canonical",
+    "blockscout_proxy_factory": {
+      "is_contract": true,
+      "is_verified": true,
+      "name": "SafeProxyFactory"
+    },
+    "blockscout_safe_l2": {
+      "is_contract": true,
+      "is_verified": true,
+      "name": "SafeL2"
+    },
+    "blockscout_fallback": {
+      "is_contract": true,
+      "is_verified": true,
+      "name": "CompatibilityFallbackHandler"
+    },
+    "blockscout_multisend": {
+      "is_contract": true,
+      "is_verified": false,
+      "name": null
+    }
+  },
+  "production_safe": {
+    "threshold": 2,
+    "owners": [
+      "REPLACE_WITH_SIGNER_1_PUBLIC_ADDRESS",
+      "REPLACE_WITH_SIGNER_2_PUBLIC_ADDRESS",
+      "REPLACE_WITH_SIGNER_3_PUBLIC_ADDRESS"
+    ],
+    "address": null,
+    "status": "OWNERS_NOT_CONFIGURED"
+  },
+  "roles_to_transfer": [
+    "ADMIN_MULTISIG",
+    "ROYALTY_RECEIVER",
+    "ENTITLEMENT_ADMIN",
+    "SNAPSHOT_PUBLISHER"
+  ],
+  "signer_policy": [
+    "3 independent signer wallets/devices",
+    "2-of-3 threshold",
+    "do not store private keys or seed phrases in repository/chat",
+    "verify each public address out-of-band before creation",
+    "rehearse role transfer before mainnet activation"
+  ],
+  "release_gate": "PRODUCTION_MULTISIG_OPEN_UNTIL_SAFE_CREATED_AND_VERIFIED"
+}
