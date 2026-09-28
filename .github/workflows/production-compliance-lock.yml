@@ -1,0 +1,29 @@
+name: Production Settlement Compliance Lock CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compliance-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate regulated settlement lock
+        run: node production/compliance/test/settlement-lock.test.cjs
+      - name: Fail closed
+        run: |
+          node - <<'NODE'
+          const x=require("./production/compliance/settlement-compliance-lock.json");
+          if(x.status!=="OPEN"||x.default_mode!=="REGULATED_REWARDS_DISABLED") process.exit(1);
+          if(Object.values(x.deployment_switches).some(Boolean)) process.exit(1);
+          console.log("PASS — regulated production paths remain disabled");
+          NODE
