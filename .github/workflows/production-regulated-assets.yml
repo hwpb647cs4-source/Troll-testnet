@@ -1,0 +1,29 @@
+name: Production Regulated Asset Lane CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  regulated-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate official registry lane mapping
+        run: node production/test/regulated-asset-lanes.test.cjs
+      - name: Confirm legal/settlement gate remains open
+        run: |
+          node - <<'NODE'
+          const x=require("./production/regulated-asset-lanes.json");
+          if(x.entitlement_policy.settlement_status!=="LEGAL_COMPLIANCE_GATE_OPEN") process.exit(1);
+          if(x.direct_vault_policy.regulated_assets_allowed!==false) process.exit(1);
+          console.log("PASS — technical lane frozen, legal gate still open");
+          NODE
