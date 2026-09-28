@@ -1,0 +1,11 @@
+const assert=require("assert");
+const x=require("../launch-profile.json");
+assert.equal(x.launch_profile,"CORE_ONLY_REGULATED_DISABLED");
+assert.equal(x.chain_id,4663);
+assert.equal(x.reviewed_contract_target.commit,"c3750b9458156e962393059f78c92e79802bf622");
+assert.equal(x.canonical_troll.address,"0x2a13008CC2F5A853F6Fb21cbD90841806C64b247");
+assert.equal(x.regulated_assets.production_enablement,false);
+assert.equal(x.mainnet.broadcast,false);
+assert.equal(x.multisig.target,"SAFE_2_OF_3");
+assert.ok(x.blockers.includes("EXPLICIT_MAINNET_AUTHORIZATION"));
+console.log("PRODUCTION LAUNCH PROFILE PASS");
