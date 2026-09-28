@@ -7,5 +7,8 @@ assert.equal(x.canonical_troll.address,"0x2a13008CC2F5A853F6Fb21cbD90841806C64b2
 assert.equal(x.regulated_assets.production_enablement,false);
 assert.equal(x.mainnet.broadcast,false);
 assert.equal(x.multisig.target,"SAFE_2_OF_3");
+assert.equal(x.risk_waivers.independent_human_audit.status,"WAIVED_BY_OWNER");
+assert.ok(!x.blockers.includes("INDEPENDENT_HUMAN_AUDIT"));
+assert.ok(!x.blockers.includes("FINAL_REVIEWED_COMMIT_FROZEN"));
 assert.ok(x.blockers.includes("EXPLICIT_MAINNET_AUTHORIZATION"));
 console.log("PRODUCTION LAUNCH PROFILE PASS");
