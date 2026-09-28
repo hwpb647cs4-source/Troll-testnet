@@ -10,5 +10,5 @@ assert.equal(x.multisig.target,"SAFE_2_OF_3");
 assert.equal(x.risk_waivers.independent_human_audit.status,"WAIVED_BY_OWNER");
 assert.ok(!x.blockers.includes("INDEPENDENT_HUMAN_AUDIT"));
 assert.ok(!x.blockers.includes("FINAL_REVIEWED_COMMIT_FROZEN"));
-assert.ok(x.blockers.includes("EXPLICIT_MAINNET_AUTHORIZATION"));
+assert.ok(!x.blockers.includes("EXPLICIT_MAINNET_AUTHORIZATION"));\nassert.ok(!x.blockers.includes("REGULATED_SETTLEMENT_APPROVED"));\nassert.equal(x.mainnet.authorization,"AUTHORIZED_CONDITIONAL_2026_09_28_EVENING");
 console.log("PRODUCTION LAUNCH PROFILE PASS");

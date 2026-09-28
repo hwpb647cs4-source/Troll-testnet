@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "product": "TROLL NFT 2.0",
+  "network": "Robinhood Chain",
+  "chain_id": 4663,
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "authorization": "AUTHORIZED_CONDITIONAL",
+  "authorized_date_local": "2026-09-28",
+  "launch_window": "EVENING_LOCAL",
+  "owner_instruction": "Launch tonight",
+  "conditions": [
+    "PRODUCTION_MULTISIG must pass",
+    "PRODUCTION_METADATA_CIDS must pass",
+    "DEDICATED_PRODUCTION_RPC must pass",
+    "FINAL_DEPLOYMENT_REHEARSAL must pass",
+    "regulated production paths remain disabled under CORE_ONLY_REGULATED_DISABLED profile"
+  ],
+  "broadcast_now": false,
+  "expires_after_local_date": "2026-09-28",
+  "note": "This is explicit owner authorization for the stated launch window, not permission to bypass any remaining non-waived release gate."
+}
