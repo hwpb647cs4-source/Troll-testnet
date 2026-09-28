@@ -1,0 +1,13 @@
+{
+  "status": "CANDIDATE_NOT_RELEASED",
+  "base_commit": "58116e035249202e3fc0c2c2baad7474f5b88684",
+  "frozen_v19_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "frozen_v19_tree": "50188d89f9f0c302d6f9520b66eebd604eece5e5",
+  "candidate_source": "v51/contracts/TrollProductionCandidateV51.sol",
+  "candidate_source_sha256": "14f8062bbab0ea9382de1543fc252be256e39ffcc8e600611f6e7e9853094dd9",
+  "compiler": "0.8.24",
+  "optimizer_runs": 200,
+  "independent_review_complete": false,
+  "release_authorized": false,
+  "evidence": "CI artifact v51-review-evidence binds sources and compiled artifacts; audit must identify the exact reviewed commit and manifest."
+}

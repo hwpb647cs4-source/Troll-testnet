@@ -1,0 +1,16 @@
+{
+  "name": "troll-v51-security-remediation-candidate",
+  "private": true,
+  "version": "51.0.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test && node --test rewards/*.test.mjs"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "@openzeppelin/contracts": "5.1.0",
+    "ethers": "6.13.4",
+    "hardhat": "2.22.13",
+    "solc": "0.8.24"
+  }
+}

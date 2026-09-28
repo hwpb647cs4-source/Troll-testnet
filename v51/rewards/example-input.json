@@ -1,0 +1,20 @@
+{
+  "epoch_id": "TEST_ONLY-example-1",
+  "chain_id": 46630,
+  "collection": "0x1111111111111111111111111111111111111111",
+  "asset_contract": "0x2222222222222222222222222222222222222222",
+  "decimals": 6,
+  "lane": "DIRECT_VAULT",
+  "snapshot_block": 100,
+  "snapshot_hash": "0xabababababababababababababababababababababababababababababababab",
+  "funding_reference": "TEST_ONLY: synthetic balance, not a transaction or funding proof",
+  "budget_raw": "300000000",
+  "treasury_balance_raw": "400000000",
+  "already_committed_raw": "100000000",
+  "minted_supply": 2,
+  "family_filter": null,
+  "tokens": [
+    {"token_id": 1, "burned_raw": "0", "family": 5, "family_revealed": true},
+    {"token_id": 2, "burned_raw": "175000000000000000000000", "family": 5, "family_revealed": true}
+  ]
+}

@@ -1,0 +1,45 @@
+name: V51 candidate validation
+on:
+  pull_request:
+    paths: ['v51/**', '.github/workflows/v51-candidate.yml']
+  push:
+    paths: ['v51/**', '.github/workflows/v51-candidate.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: v51
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Preserve frozen V19
+        run: test "$(git rev-parse HEAD:v19)" = 50188d89f9f0c302d6f9520b66eebd604eece5e5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: v51/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci --no-audit --no-fund
+      - run: npx hardhat clean && npm test
+      - run: pip install slither-analyzer==0.11.6
+      - name: Scan candidate
+        run: |
+          mkdir -p generated
+          set +e
+          slither . --ignore-compile --exclude-dependencies --json generated/slither.json > generated/slither.log 2>&1
+          set -e
+          python ../v19/scripts/slither-gate.py generated/slither.json
+      - name: Bind evidence to sources and artifacts
+        run: python scripts/review-manifest.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v51-review-evidence
+          path: v51/generated/
