@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "REGULATED_SETTLEMENT_APPROVED",
+  "status": "OPEN",
+  "default_mode": "REGULATED_REWARDS_DISABLED",
+  "chain_id": 4663,
+  "official_source": "https://docs.robinhood.com/chain/stock-tokens/",
+  "restrictions": {
+    "terminology": "Use 'Stock Tokens' or 'tokenized real-world assets such as Stock Tokens'; do not use 'tokenized stocks' or 'tokenized equities' in external-facing copy.",
+    "underlying_rights": "Stock Tokens provide economic exposure but do not grant legal or beneficial rights in the underlying securities.",
+    "us_distribution": "Do not enable Stock Token offer/sale/delivery flows until qualified legal/compliance review confirms jurisdictional eligibility and transfer restrictions.",
+    "primary_issuance": "Do not assume the app can mint/redeem directly with RHJ; primary issuance is restricted to Authorised Participants."
+  },
+  "deployment_switches": {
+    "stock_token_entitlement_recording": false,
+    "stock_token_distribution": false,
+    "stock_token_direct_vault_deposit": false,
+    "gold_silver_robinhood_token_distribution": false
+  },
+  "allowed_before_gate_pass": [
+    "read-only display of official asset metadata",
+    "technical registry verification",
+    "testnet mock-asset proofs",
+    "non-financial family/theme metadata",
+    "deployment rehearsal with regulated paths disabled"
+  ],
+  "closes_only_with": [
+    "qualified legal/compliance review",
+    "documented eligible user/jurisdiction policy",
+    "approved settlement/custody flow",
+    "approved external terminology/disclosures",
+    "production admin authorization"
+  ]
+}
