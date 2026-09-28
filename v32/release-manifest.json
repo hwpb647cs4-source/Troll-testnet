@@ -26,11 +26,14 @@
       "evidence": "v31/docs/VERIFIABLE_PROOF_BUNDLES.md"
     },
     "INDEPENDENT_HUMAN_AUDIT": {
-      "status": "OPEN",
-      "evidence": "GitHub Issue #7"
+      "status": "WAIVED_BY_OWNER",
+      "evidence": "production/risk-waivers/independent-human-audit.json",
+      "note": "Owner explicitly chose to skip the independent human audit. This is a waiver, not a security PASS."
     },
     "FINAL_REVIEWED_COMMIT_FROZEN": {
-      "status": "OPEN"
+      "status": "PASS",
+      "evidence": "production/release/final-reviewed-commit.json",
+      "note": "Exact V19 commit remains frozen; independent human audit was separately waived by owner."
     },
     "PRODUCTION_MULTISIG": {
       "status": "OPEN"

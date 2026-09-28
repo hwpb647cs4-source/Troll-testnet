@@ -5,7 +5,7 @@
   "chain_id": 4663,
   "reviewed_commit": "c3750b9458156e962393059f78c92e79802bf622",
   "dependencies": {
-    "independent_human_audit": "OPEN",
+    "independent_human_audit": "WAIVED_BY_OWNER",
     "production_roles": "OPEN",
     "production_metadata": "OPEN",
     "exact_asset_registry": "PASS_CURRENT_OFFICIAL_SNAPSHOT_REVALIDATE_AT_REHEARSAL",

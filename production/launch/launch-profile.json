@@ -45,13 +45,18 @@
     "explicit_authorization_required": true
   },
   "blockers": [
-    "INDEPENDENT_HUMAN_AUDIT",
-    "FINAL_REVIEWED_COMMIT_FROZEN",
     "PRODUCTION_MULTISIG",
     "PRODUCTION_METADATA_CIDS",
     "REGULATED_SETTLEMENT_APPROVED",
     "DEDICATED_PRODUCTION_RPC",
     "FINAL_DEPLOYMENT_REHEARSAL",
     "EXPLICIT_MAINNET_AUTHORIZATION"
-  ]
+  ],
+  "risk_waivers": {
+    "independent_human_audit": {
+      "status": "WAIVED_BY_OWNER",
+      "date": "2026-09-28",
+      "note": "Owner explicitly chose to skip the independent human audit. Internal/automated evidence remains available, but this is not equivalent to independent manual review."
+    }
+  }
 }
