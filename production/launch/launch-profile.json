@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "product": "TROLL NFT 2.0",
+  "launch_profile": "CORE_ONLY_REGULATED_DISABLED",
+  "chain_id": 4663,
+  "network": "Robinhood Chain",
+  "reviewed_contract_target": {
+    "version": "V19",
+    "commit": "c3750b9458156e962393059f78c92e79802bf622"
+  },
+  "canonical_troll": {
+    "address": "0x2a13008CC2F5A853F6Fb21cbD90841806C64b247",
+    "verification": "ONCHAIN_VERIFIED_BLOCKSCOUT",
+    "decimals": 18,
+    "symbol": "TROLL"
+  },
+  "burn_semantics": {
+    "method": "TRANSFER_FROM_TO_DEAD_ADDRESS",
+    "burn_sink": "0x000000000000000000000000000000000000dEaD",
+    "native_token_burn_functions_unused": true
+  },
+  "regulated_assets": {
+    "technical_registry": "production/assets/robinhood-assets.generated.json",
+    "lane_policy": "production/regulated-asset-lanes.json",
+    "production_enablement": false,
+    "reason": "REGULATED_SETTLEMENT_APPROVED gate is OPEN"
+  },
+  "multisig": {
+    "target": "SAFE_2_OF_3",
+    "preflight": "production/multisig/safe-preflight.json",
+    "safe_address": null,
+    "status": "SIGNER_CEREMONY_REQUIRED"
+  },
+  "rpc": {
+    "status": "PRIVATE_ENDPOINT_REQUIRED",
+    "secret_name": "RH_RPC_URL",
+    "preflight": "production/rpc/check-rpc.mjs"
+  },
+  "metadata": {
+    "status": "FINAL_5000_CIDS_REQUIRED",
+    "freeze_tool": "v39/freeze/metadata-freeze.mjs"
+  },
+  "mainnet": {
+    "broadcast": false,
+    "explicit_authorization_required": true
+  },
+  "blockers": [
+    "INDEPENDENT_HUMAN_AUDIT",
+    "FINAL_REVIEWED_COMMIT_FROZEN",
+    "PRODUCTION_MULTISIG",
+    "PRODUCTION_METADATA_CIDS",
+    "REGULATED_SETTLEMENT_APPROVED",
+    "DEDICATED_PRODUCTION_RPC",
+    "FINAL_DEPLOYMENT_REHEARSAL",
+    "EXPLICIT_MAINNET_AUTHORIZATION"
+  ]
+}
