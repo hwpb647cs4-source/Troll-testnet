@@ -1,0 +1,28 @@
+name: Canonical TROLL Production Binding CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canonical-troll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 remains frozen
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate canonical TROLL production binding
+        run: node production/test/canonical-troll.test.cjs
+      - name: Confirm no mainnet broadcast enabled
+        run: |
+          node - <<'NODE'
+          const x=require("./production/canonical-troll.json");
+          if(x.verification_status!=="PENDING_ONCHAIN_CONTRACT_VERIFICATION") process.exit(1);
+          console.log("PASS — canonical token recorded; mainnet verification still required");
+          NODE

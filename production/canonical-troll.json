@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "asset": "TROLL",
+  "role": "EVOLUTION_BURN_TOKEN",
+  "expected_chain_id": 4663,
+  "contract_address": "0x2a13008CC2F5A853F6Fb21cbD90841806C64b247",
+  "designation": "USER_CONFIRMED_CANONICAL_TROLL",
+  "verification_status": "PENDING_ONCHAIN_CONTRACT_VERIFICATION",
+  "deployment_binding": {
+    "contract": "TrollEvolutionEngineV19",
+    "constructor_parameter": "troll_",
+    "value": "0x2a13008CC2F5A853F6Fb21cbD90841806C64b247"
+  },
+  "burn_sink": {
+    "meaning": "Destination that receives TROLL during evolve()",
+    "value": "0x000000000000000000000000000000000000dEaD",
+    "status": "UNCHANGED_UNLESS_SEPARATELY_AUTHORIZED"
+  },
+  "note": "This address is the canonical TROLL ERC-20 token contract for the production burn/evolution mechanism. It is not the burn destination."
+}

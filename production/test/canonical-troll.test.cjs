@@ -1,0 +1,12 @@
+const assert=require("assert");
+const x=require("../canonical-troll.json");
+assert.equal(x.asset,"TROLL");
+assert.equal(x.role,"EVOLUTION_BURN_TOKEN");
+assert.equal(x.expected_chain_id,4663);
+assert.equal(x.contract_address,"0x2a13008CC2F5A853F6Fb21cbD90841806C64b247");
+assert.equal(x.deployment_binding.contract,"TrollEvolutionEngineV19");
+assert.equal(x.deployment_binding.constructor_parameter,"troll_");
+assert.equal(x.deployment_binding.value,x.contract_address);
+assert.equal(x.burn_sink.value,"0x000000000000000000000000000000000000dEaD");
+assert.equal(x.verification_status,"PENDING_ONCHAIN_CONTRACT_VERIFICATION");
+console.log("CANONICAL TROLL PRODUCTION BINDING PASS");
