@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "local_date": "2026-09-28",
+  "target_window": "EVENING_LOCAL",
+  "state": "PREPARING_FOR_LAUNCH",
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "chain_id": 4663,
+  "current_blockers": [
+    "PRODUCTION_MULTISIG",
+    "PRODUCTION_METADATA_CIDS",
+    "DEDICATED_PRODUCTION_RPC",
+    "FINAL_DEPLOYMENT_REHEARSAL"
+  ],
+  "regulated_paths": "DISABLED",
+  "independent_human_audit": "WAIVED_BY_OWNER",
+  "owner_launch_authorization": "RECORDED_CONDITIONAL",
+  "broadcast": false
+}
