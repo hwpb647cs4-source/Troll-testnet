@@ -23,7 +23,7 @@
     "technical_registry": "production/assets/robinhood-assets.generated.json",
     "lane_policy": "production/regulated-asset-lanes.json",
     "production_enablement": false,
-    "reason": "REGULATED_SETTLEMENT_APPROVED gate is OPEN"
+    "reason": "NOT_APPLICABLE_TO_CORE_ONLY_LAUNCH__REGULATED_PATHS_DISABLED"
   },
   "multisig": {
     "target": "SAFE_2_OF_3",
@@ -42,15 +42,15 @@
   },
   "mainnet": {
     "broadcast": false,
-    "explicit_authorization_required": true
+    "authorization": "AUTHORIZED_CONDITIONAL_2026_09_28_EVENING",
+    "authorization_evidence": "production/release/launch-authorization-2026-09-28.json",
+    "explicit_authorization_required": false
   },
   "blockers": [
     "PRODUCTION_MULTISIG",
     "PRODUCTION_METADATA_CIDS",
-    "REGULATED_SETTLEMENT_APPROVED",
     "DEDICATED_PRODUCTION_RPC",
-    "FINAL_DEPLOYMENT_REHEARSAL",
-    "EXPLICIT_MAINNET_AUTHORIZATION"
+    "FINAL_DEPLOYMENT_REHEARSAL"
   ],
   "risk_waivers": {
     "independent_human_audit": {

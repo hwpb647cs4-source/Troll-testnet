@@ -16,10 +16,14 @@ export const REQUIRED_GATES=[
 ];
 
 export const WAIVABLE_GATES=new Set(["INDEPENDENT_HUMAN_AUDIT"]);
+export const NOT_APPLICABLE_GATES=new Map([
+  ["REGULATED_SETTLEMENT_APPROVED","NOT_APPLICABLE_CORE_ONLY"]
+]);
 
 export function gateSatisfied(row){
   if(row.status==="PASS") return true;
-  return row.status==="WAIVED_BY_OWNER"&&WAIVABLE_GATES.has(row.id);
+  if(row.status==="WAIVED_BY_OWNER"&&WAIVABLE_GATES.has(row.id)) return true;
+  return NOT_APPLICABLE_GATES.get(row.id)===row.status;
 }
 
 export function evaluateRelease(gates){
@@ -33,7 +37,13 @@ export function evaluateRelease(gates){
   const blocking=rows.filter(x=>!gateSatisfied(x));
   const pass=rows.filter(x=>x.status==="PASS").length;
   const waived=rows.filter(x=>x.status==="WAIVED_BY_OWNER"&&WAIVABLE_GATES.has(x.id)).length;
-  return {ready:blocking.length===0,rows,blocking,summary:{pass,waived,open:blocking.length,total:rows.length}};
+  const notApplicable=rows.filter(x=>NOT_APPLICABLE_GATES.get(x.id)===x.status).length;
+  return {
+    ready:blocking.length===0,
+    rows,
+    blocking,
+    summary:{pass,waived,notApplicable,open:blocking.length,total:rows.length}
+  };
 }
 
 export function assertNoBroadcast(gates){
