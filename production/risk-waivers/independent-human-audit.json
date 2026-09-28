@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "INDEPENDENT_HUMAN_AUDIT",
+  "decision": "WAIVED_BY_OWNER",
+  "date": "2026-09-28",
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "meaning": "The independent human audit will not be required for the current core-only launch profile.",
+  "not_a_pass": true,
+  "residual_risk": "Independent manual reviewers may identify issues not found by internal tests, Slither, testnet rehearsals, or external automated review.",
+  "existing_evidence": [
+    "V19 Slither: 0 High / 0 Medium",
+    "five sequential internal audit passes",
+    "full Robinhood Chain testnet lifecycle proof",
+    "A→B persistence proof",
+    "Blockhertz external automated review reconciled"
+  ],
+  "scope_guard": "This waiver applies only to INDEPENDENT_HUMAN_AUDIT. It does not waive production multisig, metadata, RPC, regulated-settlement, final rehearsal, or explicit mainnet authorization."
+}
