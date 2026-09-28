@@ -1,0 +1,66 @@
+name: V19 Read-only Evidence Recheck
+on:
+  push:
+    branches: ['recheck/v19-testnet-evidence-20260923']
+    paths:
+      - 'audit/rehearsal-check/**'
+      - '.github/workflows/v19-readonly-recheck.yml'
+  pull_request:
+    branches: ['main']
+    paths:
+      - 'audit/rehearsal-check/**'
+      - '.github/workflows/v19-readonly-recheck.yml'
+      - 'deploy/v19-testnet/FINAL_REHEARSAL_PROOF.json'
+permissions:
+  contents: read
+jobs:
+  frozen-contract-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify frozen V19 source unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Install dependencies without lifecycle scripts
+        working-directory: v19
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Static checks
+        working-directory: v19
+        run: npm run validate:static
+      - name: Compile pinned Solidity candidate
+        working-directory: v19
+        run: npm run compile
+      - name: Existing V19 tests on local Hardhat only
+        working-directory: v19
+        run: npm test -- --network hardhat
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v19-recheck-build
+          path: |
+            v19/artifacts/build-info/
+            v19/package-lock.json
+          retention-days: 14
+  evidence-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Evidence-checker unit tests (mocked RPC)
+        run: python3 -m unittest discover -s audit/rehearsal-check -p 'test_*.py' -v
+      - name: Reject invalid proof and attempt read-only receipt verification
+        run: python3 audit/rehearsal-check/validate_proof.py deploy/v19-testnet/FINAL_REHEARSAL_PROOF.json --rpc-read --output proof-check-live.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v19-readonly-proof-check
+          path: proof-check-live.json
+          retention-days: 14
