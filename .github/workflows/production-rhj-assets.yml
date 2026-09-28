@@ -1,0 +1,46 @@
+name: Production RHJ Asset Registry Fetch
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Fetch official Robinhood asset registry
+        run: node production/assets/fetch-robinhood-assets.mjs
+      - name: Validate resolved active assets
+        run: |
+          node - <<'NODE'
+          const x=require("./production/assets/robinhood-assets.generated.json");
+          const required=["AAPL","NVDA","MSFT","AMZN","GOOGL","META","TSLA"];
+          for(const s of required){
+            const a=x.assets.find(v=>v.symbol===s);
+            if(!a||a.status!=="ASSET_STATUS_ACTIVE"||a.chain_id!==4663||!/^0x[0-9a-fA-F]{40}$/.test(a.contract_address)||a.decimals!==18) {
+              console.error("FAILED",s,a); process.exit(1);
+            }
+          }
+          console.log("PASS Magnificent Seven exact official RHJ registry");
+          NODE
+      - name: Commit generated registry to PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add production/assets/robinhood-assets.generated.json
+          if git diff --cached --quiet; then
+            echo "No registry changes"
+          else
+            git commit -m "Generate official Robinhood production asset registry [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
