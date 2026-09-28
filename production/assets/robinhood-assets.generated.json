@@ -1,0 +1,271 @@
+{
+  "schema_version": "1.0.0",
+  "source": "https://api.robinhood.com/rhj/assets",
+  "chain_id": 4663,
+  "selection": [
+    "AAPL",
+    "NVDA",
+    "MSFT",
+    "AMZN",
+    "GOOGL",
+    "META",
+    "TSLA",
+    "GLD",
+    "SLV"
+  ],
+  "assets": [
+    {
+      "symbol": "AAPL",
+      "token_name": "Apple • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000c2425be3658540dd8e2424cbf3c5c649",
+      "chain_id": 4663,
+      "contract_address": "0xaF3D76f1834A1d425780943C99Ea8A608f8a93f9",
+      "decimals": 18,
+      "current_multiplier": "1.000566080061092436",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US0378331005",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "NVDA",
+      "token_name": "NVIDIA • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000915f477416294f5099a5e0e09f327ce5",
+      "chain_id": 4663,
+      "contract_address": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+      "decimals": 18,
+      "current_multiplier": "1.000775159164630595",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US67066G1040",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "MSFT",
+      "token_name": "Microsoft • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000307bb0113ca54f93adf80f4ff2bf681a",
+      "chain_id": 4663,
+      "contract_address": "0xe93237C50D904957Cf27E7B1133b510C669c2e74",
+      "decimals": 18,
+      "current_multiplier": "1.000412952576205964",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US5949181045",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "AMZN",
+      "token_name": "Amazon • Robinhood Token",
+      "asset_uid": "0x000000000000000000000000000000004f508d5e2a7042299694d85c2f362ad2",
+      "chain_id": 4663,
+      "contract_address": "0x12f190a9F9d7D37a250758b26824B97CE941bF54",
+      "decimals": 18,
+      "current_multiplier": "1.000000000000000000",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US0231351067",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "GOOGL",
+      "token_name": "Alphabet Class A • Robinhood Token",
+      "asset_uid": "0x0000000000000000000000000000000053b69e2076884cc9ae2ada9bc7095df3",
+      "chain_id": 4663,
+      "contract_address": "0x2e0847E8910a9732eB3fb1bb4b70a580ADAD4FE3",
+      "decimals": 18,
+      "current_multiplier": "1.000193924414112587",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US02079K3059",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "META",
+      "token_name": "Meta Platforms • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000343e7beca03644bcba2e50b8236784f5",
+      "chain_id": 4663,
+      "contract_address": "0xc0D6457C16Cc70d6790Dd43521C899C87ce02f35",
+      "decimals": 18,
+      "current_multiplier": "1.000541459879451635",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US30303M1027",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "TSLA",
+      "token_name": "Tesla • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000cfece3244ea34bb29414dd9488b32d9f",
+      "chain_id": 4663,
+      "contract_address": "0x322F0929c4625eD5bAd873c95208D54E1c003b2d",
+      "decimals": 18,
+      "current_multiplier": "1.000000000000000000",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US88160R1014",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "GLD",
+      "token_name": "SPDR Gold Trust • Robinhood Token",
+      "asset_uid": "0x000000000000000000000000000000001db61e88b20b481093c556e4d07195b5",
+      "chain_id": 4663,
+      "contract_address": "0xC9a981FEE1F9DEc688bb123ccDeCc63D0deBFC4e",
+      "decimals": 18,
+      "current_multiplier": "1.000000000000000000",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US78463V1070",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    },
+    {
+      "symbol": "SLV",
+      "token_name": "iShares Silver Trust • Robinhood Token",
+      "asset_uid": "0x00000000000000000000000000000000ddf030d4e25046cab85b3d8c7cd86553",
+      "chain_id": 4663,
+      "contract_address": "0x411eFb0E7f985935DAec3D4C3ebaEa0d0AD7D89f",
+      "decimals": 18,
+      "current_multiplier": "1.000000000000000000",
+      "pending_multiplier": "",
+      "status": "ASSET_STATUS_ACTIVE",
+      "trading_capabilities": {
+        "market": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "extended": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        },
+        "overnight": {
+          "whole": "TRADING_STATUS_TRADABLE",
+          "fractional": "TRADING_STATUS_TRADABLE"
+        }
+      },
+      "isin": "US46428Q1094",
+      "source": "https://api.robinhood.com/rhj/assets",
+      "observed_at": "2026-09-28T16:26:31.452Z"
+    }
+  ],
+  "note": "Generated directly from Robinhood's official RHJ assets API. Re-fetch immediately before final mainnet freeze."
+}
