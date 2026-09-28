@@ -1,0 +1,19 @@
+name: Production RPC Preflight
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  rpc-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Check dedicated Robinhood Chain mainnet RPC
+        env:
+          RH_RPC_URL: ${{ secrets.RH_RPC_URL }}
+        run: node production/rpc/check-rpc.mjs

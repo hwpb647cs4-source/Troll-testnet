@@ -8,7 +8,7 @@
     "independent_human_audit": "OPEN",
     "production_roles": "OPEN",
     "production_metadata": "OPEN",
-    "exact_asset_registry": "OPEN",
+    "exact_asset_registry": "PASS_CURRENT_OFFICIAL_SNAPSHOT_REVALIDATE_AT_REHEARSAL",
     "regulated_settlement": "OPEN"
   },
   "contracts": [],

@@ -39,7 +39,9 @@
       "status": "OPEN"
     },
     "EXACT_ASSET_REGISTRY": {
-      "status": "OPEN"
+      "status": "PASS",
+      "evidence": "production/assets/robinhood-assets.generated.json + production/regulated-asset-lanes.json",
+      "note": "Official Robinhood RHJ chain-4663 snapshot validated in CI. Final deployment rehearsal must re-fetch and fail closed on any address/status/decimals/multiplier drift."
     },
     "REGULATED_SETTLEMENT_APPROVED": {
       "status": "OPEN"
