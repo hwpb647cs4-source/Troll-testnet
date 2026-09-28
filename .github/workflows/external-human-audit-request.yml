@@ -1,0 +1,21 @@
+name: External Human Audit Request Draft CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate request references exact frozen target
+        run: |
+          grep -q "c3750b9458156e962393059f78c92e79802bf622" audit/external/callisto/AUDIT_REQUEST.md
+          grep -q "free-of-charge audit" audit/external/callisto/AUDIT_REQUEST.md
+          echo "PASS — external human audit request draft ready"
