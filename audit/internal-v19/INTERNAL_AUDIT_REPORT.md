@@ -27,24 +27,110 @@ This is an **internal review**, not an independent third-party audit.
 
 ## Manual review findings
 
-### IA-01 — HIGH DESIGN RISK — passive vault assets have no withdrawal/execution path
+### IA-01 — HIGH DESIGN RISK — permanent passive-vault custody
 
-**Surface:** `TrollBoundVaultV19`
+**Surface:** `TrollBoundVaultV19`  
+**Disposition:** design intent recorded; independent verification and disclosure evidence pending.  
+**Release status:** HIGH / TRIAGED in V34; mainnet remains BLOCKED.
 
-The V19 bound vault implements ERC-721/ERC-1155 receiver hooks but no owner-controlled ERC-20/ERC-721/ERC-1155 transfer or generic execution function.
+The decision is already recorded in [findings.json](./findings.json), introduced on main by
+[commit 3d04bd5](https://github.com/hwpb647cs4-source/Troll-testnet/commit/3d04bd57a68f58bb73df2af55a271bccae7b88ba).
+PR #44's original OPEN_DECISION text predates that record. This reconciliation preserves that
+decision; it does not assert that an independent auditor has approved it.
 
-Consequences if real assets are deposited:
-- ERC-20 assets remain held by the vault indefinitely;
-- NFTs/ERC-1155 assets accepted by the vault have no V19 withdrawal path;
-- value can move economically with sale of the controlling NFT, but the underlying assets cannot be redeemed or transferred by the NFT holder through V19.
+**Recorded decision:** retain permanent, non-withdrawable NFT-bound accumulation in frozen V19
+at `c3750b9458156e962393059f78c92e79802bf622`. Do not add holder withdrawals,
+administrator sweeps, token approvals, upgrades, or arbitrary execution as an IA-01 patch.
 
-This may be intentional for a permanent accumulation vault, but it must be treated as a **product/economic design decision**, not described as an ordinary spendable wallet.
+#### What custody and rewards actually mean
 
-**Mainnet disposition required:** choose one:
-1. explicitly keep the vault permanently non-withdrawable and disclose this property; or
-2. design a separately audited owner-authorized execution/withdrawal mechanism, which would create a new audit target and invalidate the current frozen V19 release target.
+- The vault stores immutable collection/token-ID/factory references. It accepts ERC-721/ERC-1155
+  safe transfers and can receive ERC-20 transfers. It implements no asset-out, approval,
+  recovery, generic-call, or upgrade function. Neither the holder nor the project administrator
+  can extract assets through V19. Ordinary native-currency sends revert.
+- Selling/transferring the Genesis NFT changes its owner and preserves the vault address,
+  burn history, and evolution by token ID. It grants no redemption right over vault assets.
+  A possible secondary sale is not a guaranteed exit, liquidity source, or realizable vault value.
+- Anyone can call `depositDirect` using their own approved funds. The router requires an enabled,
+  local-chain DIRECT_VAULT asset and measures the actual received ERC-20 amount. These checks
+  apply to the router only: direct token transfers and receiver hooks bypass its asset list.
+  The permissionless factory can also create vaults for nonexistent token IDs.
+- Evolution credits TROLL received at the configured dead address. `rewardWeightBps` exposes
+  weights from 1.00x to 5.00x, including 2.00x at ASCENDED. The reward router never reads that
+  weight: it implements no budget, eligibility snapshot, allocation formula, recurring payout,
+  or guarantee of larger distributions. A funded reward policy remains separate.
+- `recordRegulatedEntitlement` is administrator-only cumulative bookkeeping with a latest
+  manifest hash and event history. It neither delivers stock tokens to the vault nor executes
+  settlement/redemption. A record is not proof of backing, direct share ownership, or an
+  automatically transferable legal claim. Settlement remains a separate gate under issue #41.
+- “Permanent” describes the absence of a V19 withdrawal path. It does not promise constant
+  balances or value: external token mechanics, issuer powers, and market prices remain relevant.
+  The vault is not an ordinary spendable wallet or an ERC-6551 execution account.
 
-No code change is recommended automatically.
+These conclusions follow from
+[the frozen source](https://github.com/hwpb647cs4-source/Troll-testnet/blob/c3750b9458156e962393059f78c92e79802bf622/v19/contracts/TrollProductionCandidateV19.sol).
+Epoch funding, eligibility, asset identity, allocation, and settlement evidence belong in
+[the reward ledger](../../v28/docs/REWARD_LEDGER.md), with live balances and regulated records kept separate.
+
+#### Alternatives and recommendation
+
+| Option | Security and holder tradeoff | Review consequence |
+| --- | --- | --- |
+| Retain passive accumulation | Smallest executable attack surface; no holder/admin drain path. Deposits and mistakes are irreversible through V19. | Recommended for the already-recorded product intent; reconcile disclosures and obtain independent verification. Frozen source stays unchanged. |
+| Narrow holder withdrawals | Supports redemption. Check current `ownerOf(tokenId)` on every call; initially transfer only to that owner, with typed asset methods, safe transfers, reentrancy protection, and events. No operator/admin authority, approvals, or arbitrary calls. | Preferred starting point if redemption becomes required. New contracts/target, transfer and hostile-token tests, and independent review required. |
+| Separate funded reward distributor | Future rewards can be claimable without funding passive vaults. Adds budget, eligibility/ownership-at-claim, epoch, and replay-prevention decisions. | Separate audited scope; cannot recover existing V19 deposits or silently change promised accumulation. |
+| Administrator/multisig rescue | Adds an administrator asset-seizure path. A threshold or delay does not preserve the no-withdrawal promise. | Reject as a quick fix; material custody change and new audit target. |
+| Generic execution/account | Enables spending, approvals, and application interactions, with substantially broader authorization and callback risks. | Outside the frozen product scope; not a minimal IA-01 remediation. |
+
+This recommendation minimizes changes to the chosen product; it does not make permanent
+lockup suitable for holders who require redemption. Withdrawable accounts also need protection
+against removing assets before a pending NFT sale. The
+[ERC-6551 security considerations](https://eips.ethereum.org/EIPS/eip-6551#security-considerations)
+describe that sale risk and ownership cycles.
+
+A concrete V19 residual risk follows from its permissive ERC-721 receiver: sending the
+Genesis NFT into its own passive vault can trap the NFT itself. Other NFTs sent to any passive
+vault are likewise unrecoverable through V19. This source-derived scenario requires explicit
+external assessment; disclosure alone is not proof that every locking scenario is acceptable.
+Existing vault deposits cannot be migrated by merely deploying a new factory or withdrawal contract.
+
+#### Holder-facing disclosure
+
+> This NFT is linked to a permanent accumulation vault. Assets sent there cannot be withdrawn,
+> redeemed, spent, or recovered through V19 by you or the project. Selling the NFT does not
+> unlock them, and a buyer or sale price is not guaranteed. Do not send the Genesis NFT itself
+> to a passive vault. Burn-based reward weights do not guarantee funded distributions.
+> Regulated records are separate from assets delivered on-chain and require separate settlement.
+
+The custody/reward claims in [V42](../../v42/approved-claims.json) provide source-backed copy.
+Before production, show this disclosure at mint, deposit, and Passport/balance surfaces;
+distinguish locked balances, regulated records, and historical/reference evidence.
+Adding copy to this repository is not proof that a production interface displays it.
+
+#### Evidence required before IA-01 can close
+
+1. Retain this decision's provenance and obtain a named product-owner/maintainer acknowledgement
+   of the irreversible custody model and final holder-facing copy.
+2. Identify the independent reviewer and bind the report to the exact frozen V19 commit and
+   reproduced build. Independently verify the absence of withdrawal, approval, upgrade, or
+   administrator recovery paths and assess actual deposit/receiver behavior.
+3. Reproduce the relevant ERC-20/ERC-721/ERC-1155 custody and A-to-B persistence cases, and
+   explicitly disposition accidental deposits, nonexistent-token vaults, and the Genesis NFT
+   self-lock scenario. Request a new reviewed target if a contract fix is required.
+4. Attach evidence of the production disclosure surfaces and a reviewer conclusion that the
+   HIGH concern is resolved under the documented specification. A design-intent label or an
+   automated scanner score cannot close a genuine unresolved HIGH risk.
+5. Record reviewer identity, report/evidence references, commit, and disposition in V34.
+   Move IA-01 to CLOSED_VERIFIED only when that evidence supports closure; otherwise keep it
+   blocking. ACCEPTED_RISK is not permitted for HIGH under V34 policy.
+
+The internal status RESOLVED_DESIGN_INTENT_PENDING_EXTERNAL_VERIFICATION maps to
+V34 HIGH / TRIAGED, not CLOSED_VERIFIED. Registering it makes the existing V34 CI release check
+fail until verified closure; do not weaken that check or lower severity to obtain a green run.
+
+Closing IA-01 alone does not close the independent human-audit gate, IA-02 through IA-05,
+or any production requirement in [issue #41](https://github.com/hwpb647cs4-source/Troll-testnet/issues/41).
+No mainnet authorization is supplied by this decision.
 
 ### IA-02 — MEDIUM CONFIGURATION RISK — regulated entitlement path does not enforce local chain ID
 
@@ -96,6 +182,6 @@ Product language should say **permanently removed from circulation / sent to the
 
 ## Internal conclusion
 
-The frozen V19 target has strong automated/testnet evidence, but this internal review identifies one **high-impact design question** (permanent passive-vault custody) and several privileged configuration/integrity questions that should be explicitly resolved before mainnet.
+The frozen V19 target has strong automated/testnet evidence, but this internal review records one **high-impact custody decision pending independent verification** (permanent passive-vault custody) and several privileged configuration/integrity questions that must be resolved before mainnet.
 
 This report does not close the independent-audit gate.
