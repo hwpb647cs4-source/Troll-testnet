@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "source": "BLOCKHERTZ_AI_AUDITOR",
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "external_summary": {
+    "risk_score": 25,
+    "risk_label": "LOW_RISK",
+    "findings_total": 16
+  },
+  "coverage": "PARTIAL_FROM_USER_SCREENSHOTS",
+  "dispositions": [
+    {
+      "id": "BH-01",
+      "status": "FALSE_POSITIVE",
+      "severity": "MEDIUM",
+      "title": "Missing return value in mintFromController"
+    },
+    {
+      "id": "BH-02",
+      "status": "INTENTIONAL_INFORMATIONAL",
+      "title": "ownerOf revert-based validation"
+    },
+    {
+      "id": "BH-03",
+      "status": "TRACK_CONFIGURATION",
+      "title": "metadataRouter interface/configuration"
+    },
+    {
+      "id": "BH-04",
+      "status": "FALSE_POSITIVE_GAS_ONLY",
+      "title": "Potential integer overflow in mint loop"
+    },
+    {
+      "id": "BH-05",
+      "status": "TRACK_LOW",
+      "title": "tokenId zero vault constructor semantics"
+    },
+    {
+      "id": "BH-06",
+      "status": "INTENTIONAL_DESIGN",
+      "title": "Open ERC721/ERC1155 receivers"
+    },
+    {
+      "id": "BH-07",
+      "status": "TRACK_CONFIGURATION",
+      "title": "Asset registry chainId semantics"
+    },
+    {
+      "id": "BH-08",
+      "status": "TRACK_CONFIGURATION",
+      "title": "Asset decimals validation"
+    },
+    {
+      "id": "BH-09",
+      "status": "TRACK_INTEGRITY",
+      "title": "Entitlement manifest overwrite semantics"
+    },
+    {
+      "id": "BH-10",
+      "status": "INTENTIONAL_SECURITY_ACCOUNTING",
+      "title": "Before/after balance checks"
+    },
+    {
+      "id": "BH-11",
+      "status": "INTENTIONAL_REENTRANCY_HARDENING",
+      "title": "Separate mint loops"
+    },
+    {
+      "id": "BH-12",
+      "status": "GAS_ONLY",
+      "title": "Repeated storage/config reads"
+    }
+  ],
+  "human_audit_gate": "OPEN"
+}
