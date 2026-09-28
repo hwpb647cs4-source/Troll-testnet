@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "chain_id": 4663,
+  "source_registry": "production/assets/robinhood-assets.generated.json",
+  "policy": "REGULATED_ROBINHOOD_ASSETS_ARE_ENTITLEMENT_LANE_ONLY",
+  "assets": [
+    {
+      "symbol": "AAPL",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "NVDA",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "MSFT",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "AMZN",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "GOOGL",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "META",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "TSLA",
+      "asset_class": "STOCK",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "GLD",
+      "asset_class": "GOLD",
+      "lane": "REGULATED_ENTITLEMENT"
+    },
+    {
+      "symbol": "SLV",
+      "asset_class": "SILVER",
+      "lane": "REGULATED_ENTITLEMENT"
+    }
+  ],
+  "direct_vault_policy": {
+    "regulated_assets_allowed": false,
+    "note": "Do not deposit Robinhood Stock Tokens / regulated trust-token assets directly into the permanent passive vault unless a separate legal/transferability review explicitly approves that asset and contract-vault custody path."
+  },
+  "entitlement_policy": {
+    "settlement_status": "LEGAL_COMPLIANCE_GATE_OPEN",
+    "amount_semantics": "ACCOUNTING_ENTITLEMENT_ONLY_UNTIL_SETTLEMENT_APPROVED",
+    "history": "Manifest/event history must be indexed because V19 stores the latest manifest hash."
+  }
+}
