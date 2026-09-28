@@ -7,10 +7,10 @@ const r=evaluateRelease(m.gates);
 assert.equal(r.ready,false);
 assert.equal(r.summary.total,REQUIRED_GATES.length);
 assert.ok(r.summary.pass>=7);
-assert.equal(r.summary.waived,1);
+assert.equal(r.summary.waived,1);\nassert.equal(r.summary.notApplicable,1);
 assert.equal(r.rows.find(x=>x.id==="INDEPENDENT_HUMAN_AUDIT").status,"WAIVED_BY_OWNER");
 assert.ok(!r.blocking.some(x=>x.id==="INDEPENDENT_HUMAN_AUDIT"));
-assert.ok(r.blocking.some(x=>x.id==="PRODUCTION_MULTISIG"));
+assert.ok(!r.blocking.some(x=>x.id==="REGULATED_SETTLEMENT_APPROVED"));\nassert.equal(r.rows.find(x=>x.id==="EXPLICIT_MAINNET_AUTHORIZATION").status,"PASS");\nassert.ok(r.blocking.some(x=>x.id==="PRODUCTION_MULTISIG"));
 assert.throws(()=>assertNoBroadcast(m.gates),/NO_MAINNET_BROADCAST/);
 
 const all=Object.fromEntries(REQUIRED_GATES.map(([id])=>[id,{status:"PASS"}]));
