@@ -15,7 +15,7 @@ export const REQUIRED_GATES=[
   ["EXPLICIT_MAINNET_AUTHORIZATION","external"]
 ];
 
-export const WAIVABLE_GATES=new Set(["INDEPENDENT_HUMAN_AUDIT"]);
+export const WAIVABLE_GATES=new Set(["INDEPENDENT_HUMAN_AUDIT"]);\nexport const NOT_APPLICABLE_GATES=new Map([["REGULATED_SETTLEMENT_APPROVED","NOT_APPLICABLE_CORE_ONLY"]]);
 
 export function gateSatisfied(row){
   if(row.status==="PASS") return true;
