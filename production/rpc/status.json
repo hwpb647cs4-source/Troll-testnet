@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "gate": "DEDICATED_PRODUCTION_RPC",
+  "status": "OPEN",
+  "recommended_provider": "Alchemy",
+  "expected_chain_id": 4663,
+  "secret_name": "RH_RPC_URL",
+  "endpoint_health_check": "production/rpc/check-rpc.mjs",
+  "private_endpoint_configured": false,
+  "health_check_passed": false
+}
