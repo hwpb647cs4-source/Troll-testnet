@@ -1,0 +1,13 @@
+const assert=require("assert");
+const x=require("../safe-create-call.json");
+assert.equal(x.chain_id,4663);
+assert.equal(x.factory,"0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67");
+assert.equal(x.singleton,"0x29fcB43b46531BcA003ddC8FCB67FFE91900C762");
+assert.equal(x.fallback_handler,"0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99");
+assert.equal(x.threshold,2);
+assert.equal(x.owners.length,3);
+assert.equal(new Set(x.owners.map(a=>a.toLowerCase())).size,3);
+assert.equal(x.initializer.slice(0,10),"0xb63e800d");
+assert.equal(x.salt_nonce,"202609282250");
+assert.equal(x.broadcast,false);
+console.log("SAFE CREATE CALL CONFIG PASS");
