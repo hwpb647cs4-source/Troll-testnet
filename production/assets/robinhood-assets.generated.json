@@ -40,7 +40,7 @@
       },
       "isin": "US0378331005",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "NVDA",
@@ -68,7 +68,7 @@
       },
       "isin": "US67066G1040",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "MSFT",
@@ -96,7 +96,7 @@
       },
       "isin": "US5949181045",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "AMZN",
@@ -124,7 +124,7 @@
       },
       "isin": "US0231351067",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "GOOGL",
@@ -152,7 +152,7 @@
       },
       "isin": "US02079K3059",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "META",
@@ -180,7 +180,7 @@
       },
       "isin": "US30303M1027",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "TSLA",
@@ -208,7 +208,7 @@
       },
       "isin": "US88160R1014",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "GLD",
@@ -236,7 +236,7 @@
       },
       "isin": "US78463V1070",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     },
     {
       "symbol": "SLV",
@@ -264,7 +264,7 @@
       },
       "isin": "US46428Q1094",
       "source": "https://api.robinhood.com/rhj/assets",
-      "observed_at": "2026-09-29T04:39:11.168Z"
+      "observed_at": "2026-09-29T05:54:22.038Z"
     }
   ],
   "note": "Generated directly from Robinhood's official RHJ assets API. Re-fetch immediately before final mainnet freeze."

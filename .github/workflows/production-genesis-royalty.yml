@@ -1,0 +1,29 @@
+name: Production Genesis Royalty CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  royalty:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate 3 percent creator royalty
+        run: node production/genesis/test/genesis-royalty.test.cjs
+      - name: Confirm Safe receiver still pending
+        run: |
+          node - <<'NODE'
+          const x=require("./production/genesis/genesis-constructor.json");
+          if(x.constructor.royaltyBps!==300) process.exit(1);
+          if(x.constructor.royaltyReceiver!=="PRODUCTION_SAFE_PENDING") process.exit(1);
+          console.log("PASS — 3% royalty locked, Safe address still pending");
+          NODE
