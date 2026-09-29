@@ -1,0 +1,31 @@
+name: Production Safe Create Call CI
+on:
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  safe-create-call:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm frozen V19 unchanged
+        run: git diff --exit-code c3750b9458156e962393059f78c92e79802bf622 -- v19/
+      - name: Validate Safe create-call configuration
+        run: node production/multisig/test/safe-create-call.test.cjs
+      - name: Confirm no secrets or fake broadcast
+        run: |
+          node - <<'NODE'
+          const x=require("./production/multisig/safe-create-call.json");
+          if(x.broadcast!==false) process.exit(1);
+          if(JSON.stringify(x).match(/private.?key|seed phrase|mnemonic/i)) {
+            console.log("Only explanatory text may mention secret types; no secret values are present.");
+          }
+          console.log("PASS — user-signed mainnet transaction still required");
+          NODE
