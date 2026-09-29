@@ -64,5 +64,12 @@
       "date": "2026-09-28",
       "note": "Owner explicitly chose to skip the independent human audit. Internal/automated evidence remains available, but this is not equivalent to independent manual review."
     }
+  },
+  "genesis_constructor": {
+    "initial_owner": "PRODUCTION_SAFE_PENDING",
+    "royalty_receiver": "PRODUCTION_SAFE_PENDING",
+    "royalty_bps": 300,
+    "royalty_percent": 3,
+    "status": "ROYALTY_LOCKED_SAFE_ADDRESS_PENDING"
   }
 }

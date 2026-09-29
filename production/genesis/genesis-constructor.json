@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0.0",
+  "product": "TROLL NFT 2.0",
+  "contract": "TrollInHoodGenesisV19",
+  "target_commit": "c3750b9458156e962393059f78c92e79802bf622",
+  "chain_id": 4663,
+  "constructor": {
+    "initialOwner": "PRODUCTION_SAFE_PENDING",
+    "royaltyReceiver": "PRODUCTION_SAFE_PENDING",
+    "royaltyBps": 300
+  },
+  "royalty": {
+    "percent": 3,
+    "basis_points": 300,
+    "denominator": 10000,
+    "standard": "ERC-2981",
+    "receiver_policy": "PRODUCTION_SAFE_2_OF_3",
+    "marketplace_enforcement": "NOT_GUARANTEED_BY_ERC2981"
+  },
+  "status": "ROYALTY_LOCKED_SAFE_ADDRESS_PENDING",
+  "note": "Owner selected 3% creator royalty. Final constructor arguments become complete after the production Safe address is created and verified."
+}

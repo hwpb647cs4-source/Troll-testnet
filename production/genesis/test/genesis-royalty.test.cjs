@@ -1,0 +1,10 @@
+const assert=require("assert");
+const x=require("../genesis-constructor.json");
+assert.equal(x.contract,"TrollInHoodGenesisV19");
+assert.equal(x.chain_id,4663);
+assert.equal(x.constructor.royaltyBps,300);
+assert.equal(x.royalty.percent,3);
+assert.equal(x.royalty.denominator,10000);
+assert.equal(x.royalty.receiver_policy,"PRODUCTION_SAFE_2_OF_3");
+assert.equal(x.status,"ROYALTY_LOCKED_SAFE_ADDRESS_PENDING");
+console.log("PRODUCTION GENESIS ROYALTY CONFIG PASS");
