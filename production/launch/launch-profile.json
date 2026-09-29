@@ -29,7 +29,13 @@
     "target": "SAFE_2_OF_3",
     "preflight": "production/multisig/safe-preflight.json",
     "safe_address": null,
-    "status": "SIGNER_CEREMONY_REQUIRED"
+    "status": "SIGNERS_CONFIGURED_SAFE_CREATION_PENDING",
+    "signers": [
+      "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
+      "0xdc2f1175f73e474f673717bc91583865cb3db074",
+      "0xaaa6a3c51a7fcca64348951cadda1f671144b64c"
+    ],
+    "threshold": 2
   },
   "rpc": {
     "status": "PRIVATE_ENDPOINT_REQUIRED",

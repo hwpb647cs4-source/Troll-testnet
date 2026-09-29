@@ -36,12 +36,12 @@
   "production_safe": {
     "threshold": 2,
     "owners": [
-      "REPLACE_WITH_SIGNER_1_PUBLIC_ADDRESS",
-      "REPLACE_WITH_SIGNER_2_PUBLIC_ADDRESS",
-      "REPLACE_WITH_SIGNER_3_PUBLIC_ADDRESS"
+      "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
+      "0xdc2f1175f73e474f673717bc91583865cb3db074",
+      "0xaaa6a3c51a7fcca64348951cadda1f671144b64c"
     ],
     "address": null,
-    "status": "OWNERS_NOT_CONFIGURED"
+    "status": "SIGNERS_CONFIGURED_SAFE_CREATION_PENDING"
   },
   "roles_to_transfer": [
     "ADMIN_MULTISIG",
@@ -56,5 +56,30 @@
     "verify each public address out-of-band before creation",
     "rehearse role transfer before mainnet activation"
   ],
-  "release_gate": "PRODUCTION_MULTISIG_OPEN_UNTIL_SAFE_CREATED_AND_VERIFIED"
+  "release_gate": "PRODUCTION_MULTISIG_OPEN_UNTIL_SAFE_CREATED_AND_VERIFIED",
+  "signer_verification": {
+    "source": "OWNER_CONFIRMED_IN_CHAT",
+    "chain_id": 4663,
+    "blockscout_checks": [
+      {
+        "address": "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
+        "is_contract": false,
+        "reputation": "ok",
+        "native_balance_wei": "0"
+      },
+      {
+        "address": "0xdc2f1175f73e474f673717bc91583865cb3db074",
+        "is_contract": false,
+        "reputation": "ok",
+        "native_balance_wei": "0"
+      },
+      {
+        "address": "0xaaa6a3c51a7fcca64348951cadda1f671144b64c",
+        "is_contract": false,
+        "reputation": "ok",
+        "native_balance_wei": null
+      }
+    ],
+    "note": "Signer addresses are configured. Safe creation/read-back verification is still required before closing PRODUCTION_MULTISIG."
+  }
 }

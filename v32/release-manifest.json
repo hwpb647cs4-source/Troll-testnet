@@ -36,7 +36,9 @@
       "note": "Exact V19 commit remains frozen; independent human audit was separately waived by owner."
     },
     "PRODUCTION_MULTISIG": {
-      "status": "OPEN"
+      "status": "OPEN",
+      "evidence": "production/multisig/safe-preflight.json",
+      "note": "2-of-3 signer set configured by owner. Safe contract creation and on-chain owner/threshold read-back remain required."
     },
     "PRODUCTION_METADATA_CIDS": {
       "status": "OPEN"
