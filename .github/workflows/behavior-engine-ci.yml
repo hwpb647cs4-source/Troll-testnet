@@ -23,8 +23,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: npm
-          cache-dependency-path: behavior-engine/v0.1/package-lock.json
       - run: npm install --package-lock-only
       - run: npm ci
       - run: npm run compile
