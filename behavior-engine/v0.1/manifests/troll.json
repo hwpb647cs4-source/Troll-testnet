@@ -1,0 +1,11 @@
+{
+  "engine": "VerifiableBehaviorEngineV01",
+  "status": "EXPERIMENTAL_LOCAL_ONLY",
+  "productionCoreModified": false,
+  "lifecycle": ["PRECOMMIT","ACT","RESOLVE","LOCK","PROVENANCE"],
+  "trollInvariant": "evolution strength is derived only from cumulative TROLL burn",
+  "branchCount": 8,
+  "entropyPolicy": "entropy may select behavioral/visual branch but may not increase evolution strength",
+  "integration": "burn evidence must be verified by a future adapter before production use",
+  "mainnet": false
+}
