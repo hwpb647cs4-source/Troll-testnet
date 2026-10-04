@@ -31,3 +31,6 @@ Those values are deliberately absent from this repository until supplied and ver
 ## Hard rule
 
 This rehearsal must never broadcast. Mainnet deployment is a separate owner-confirmed step after every release gate is PASS.
+
+
+CI trigger: final no-broadcast rehearsal after workflow landed on main.
