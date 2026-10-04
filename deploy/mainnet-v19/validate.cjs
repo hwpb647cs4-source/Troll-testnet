@@ -1,0 +1,11 @@
+const fs=require("fs"),crypto=require("crypto");
+const m=require("./manifest.json");
+if(m.target_chain.chain_id!==4663)throw Error("wrong chain");
+if(m.frozen_core.commit!=="c3750b9458156e962393059f78c92e79802bf622")throw Error("wrong frozen commit");
+if(m.release_mode!=="DRY_RUN_NO_BROADCAST"||m.broadcast!==false)throw Error("broadcast enabled");
+if(!m.hard_blocks.includes("PRODUCTION_MULTISIG"))throw Error("multisig block missing");
+if(!m.hard_blocks.includes("PRODUCTION_METADATA_CIDS"))throw Error("metadata block missing");
+if(!m.hard_blocks.includes("DEDICATED_RPC_CREDENTIALS"))throw Error("rpc block missing");
+const canonical=JSON.stringify(m);
+console.log("FINAL MAINNET REHEARSAL MANIFEST PASS");
+console.log("sha256",crypto.createHash("sha256").update(canonical).digest("hex"));
