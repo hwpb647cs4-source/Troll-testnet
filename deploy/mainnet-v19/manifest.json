@@ -1,0 +1,36 @@
+{
+  "schema_version": "final-mainnet-rehearsal-1.0",
+  "target_chain": {
+    "name": "Robinhood Chain",
+    "chain_id": 4663,
+    "native_currency": "ETH",
+    "explorer": "https://robinhoodchain.blockscout.com"
+  },
+  "frozen_core": {
+    "version": "V19",
+    "commit": "c3750b9458156e962393059f78c92e79802bf622"
+  },
+  "release_mode": "DRY_RUN_NO_BROADCAST",
+  "rpc": {
+    "production_provider": "Alchemy",
+    "endpoint_template": "https://robinhood-mainnet.g.alchemy.com/v2/{API_KEY}",
+    "public_fallback": "https://rpc.mainnet.chain.robinhood.com",
+    "api_key_in_repo": false
+  },
+  "prerequisites": {
+    "frozen_v19": true,
+    "final_testnet_rehearsal": true,
+    "five_internal_audits": true,
+    "external_automated_review": true,
+    "exact_asset_registry": true,
+    "production_multisig": false,
+    "production_metadata_cids": false,
+    "dedicated_rpc_credentials": false
+  },
+  "hard_blocks": [
+    "PRODUCTION_MULTISIG",
+    "PRODUCTION_METADATA_CIDS",
+    "DEDICATED_RPC_CREDENTIALS"
+  ],
+  "broadcast": false
+}
