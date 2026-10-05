@@ -1,0 +1,387 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TROLL V19 Mainnet Bootstrap</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;background:#040806;color:#effff3;font-family:system-ui,-apple-system,sans-serif}
+.w{max-width:860px;margin:auto;padding:14px}
+.p{background:#0a1510;border:1px solid #294a3a;border-radius:18px;padding:15px;margin:11px 0}
+h1{margin:4px 0;font-size:29px}h1 b,.ok{color:#6cff75}h2{margin:0 0 8px;font-size:19px}
+.sub{font-size:12px;color:#bdd0c2;line-height:1.5}.warn{color:#ffda83}.bad{color:#ff8b8b}
+.s{padding:10px;background:#06110c;border:1px solid #244235;border-radius:11px;font-size:12px;word-break:break-word}
+button,input{font:inherit;width:100%;box-sizing:border-box;padding:12px;border-radius:11px;margin-top:7px}
+button{border:0;background:#6cff75;font-weight:900;color:#041b08}
+button.secondary{background:#173026;color:#eaffee;border:1px solid #315846}
+button.danger{background:#d95656;color:#fff}button:disabled{opacity:.35}
+input{background:#06110c;color:#fff;border:1px solid #315846}
+label.cb{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#d4e4d8;margin-top:10px}
+label.cb input{width:auto;margin:2px 0 0}
+.r{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #173126;font-size:12px}
+.r span{color:#9eb2a5}.log{white-space:pre-wrap;font:11px ui-monospace,monospace;max-height:420px;overflow:auto}
+.tag{display:inline-block;border:1px solid #47705a;border-radius:999px;padding:5px 8px;font-size:10px;margin-right:4px}
+a{color:#87e6ff}
+</style>
+</head>
+<body><div class="w">
+
+<section class="p">
+<span class="tag">ROBINHOOD MAINNET 4663</span><span class="tag">REAL GAS</span><span class="tag">MINT CLOSED</span>
+<h1>TROLL <b>V19 Mainnet Bootstrap</b></h1>
+<div class="sub">
+Frozen source: <code>c3750b9458156e962393059f78c92e79802bf622</code>.<br>
+This launcher creates the production 2-of-3 Safe and deploys the reviewed V19 core in an <b>inert</b> state.
+It does <b>not</b> mint NFTs, configure the mint controller, configure metadata, register regulated assets, or enable Stock Token rewards.
+</div>
+</section>
+
+<section class="p">
+<h2>1. Connect wallet + preflight</h2>
+<button id="switch">Add / Switch Robinhood Chain Mainnet</button>
+<button id="connect" class="secondary">Connect Rabby / EVM Wallet</button>
+<button id="resumeWallet" class="secondary">Use Already Connected Account</button>
+<div id="wallet" class="s">Not connected.</div>
+<button id="runPreflight" class="secondary" disabled>Run Mainnet Preflight</button>
+<div id="preflight" class="s">Preflight not run.</div>
+</section>
+
+<section class="p">
+<h2>2. Production Safe — 2 of 3</h2>
+<div class="sub">Signer addresses are prefilled from the approved production configuration. Confirm them before signing.</div>
+<input id="signer1" value="0x745B9B869900B2D8c2742DD9361Cba88EB133c15">
+<input id="signer2" value="0xdc2f1175f73e474f673717bc91583865cb3db074">
+<input id="signer3" value="0xaaa6a3c51a7fcca64348951cadda1f671144b64c">
+<label class="cb"><input id="confirmSafe" type="checkbox"><span>I confirm these are the three intended production Safe signers and I understand this creates a real mainnet Safe using real gas.</span></label>
+<button id="createSafe" disabled>Create Production Safe 2-of-3 — REAL MAINNET</button>
+<div class="sub" style="margin-top:9px">Or verify an already-created Safe:</div>
+<input id="existingSafe" placeholder="Existing Safe address (optional)">
+<button id="verifySafe" class="secondary" disabled>Verify Existing 2-of-3 Safe</button>
+<div id="safeState" class="s">Safe not configured.</div>
+</section>
+
+<section class="p">
+<h2>3. Deploy reviewed V19 inert core</h2>
+<div class="s"><b>Creator royalty: 3% (300 bps)</b><br>Royalty receiver: production Safe<br>Initial owner: production Safe</div>
+<label class="cb"><input id="confirmCore" type="checkbox"><span>I confirm the Safe above and understand the following deployments spend real ETH on Robinhood Chain mainnet.</span></label>
+<button id="deployCore" class="danger" disabled>Deploy V19 Inert Core — REAL MAINNET</button>
+<div id="deployState" class="s">Waiting.</div>
+</section>
+
+<section class="p">
+<h2>4. Verify bootstrap invariants</h2>
+<button id="verifyCore" class="secondary" disabled>Verify Deployed Core</button>
+<div id="verifyState" class="s">Not verified.</div>
+</section>
+
+<section class="p">
+<h2>5. Deployment evidence</h2>
+<button id="copyEvidence" class="secondary" disabled>Copy Deployment Evidence</button>
+<div id="evidence" class="s">No mainnet evidence yet.</div>
+<div class="sub" style="margin-top:8px">
+A successful bootstrap means the contracts are live but public mint remains closed. Metadata/CIDs and mint activation remain separate.
+</div>
+</section>
+
+<section class="p">
+<h2>Transaction log</h2>
+<div id="log" class="log">Ready.</div>
+</section>
+
+</div>
+
+<script type="module">
+import { ethers } from "https://esm.sh/ethers@6.13.4";
+
+const CHAIN=4663;
+const HEX="0x1237";
+const RPC="https://rpc.mainnet.chain.robinhood.com";
+const EX="https://robinhoodchain.blockscout.com";
+const DEAD="0x000000000000000000000000000000000000dEaD";
+const TROLL="0x2a13008CC2F5A853F6Fb21cbD90841806C64b247";
+const SAFE_FACTORY="0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67";
+const SAFE_SINGLETON="0x29fcB43b46531BcA003ddC8FCB67FFE91900C762";
+const SAFE_FALLBACK="0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99";
+const COMMIT="c3750b9458156e962393059f78c92e79802bf622";
+const ROYALTY_BPS=300;
+
+const FACTORY_ABI=[
+ "event ProxyCreation(address indexed proxy,address singleton)",
+ "function createProxyWithNonce(address _singleton,bytes initializer,uint256 saltNonce) returns(address proxy)"
+];
+const SAFE_ABI=[
+ "function setup(address[] _owners,uint256 _threshold,address to,bytes data,address fallbackHandler,address paymentToken,uint256 payment,address paymentReceiver)",
+ "function getOwners() view returns(address[])",
+ "function getThreshold() view returns(uint256)"
+];
+
+const $=id=>document.getElementById(id);
+let provider,signer,account,build;
+let A={};
+
+function key(){return account?"troll-v19-mainnet-bootstrap-"+account.toLowerCase():"";}
+function log(x){$("log").textContent+="\n"+x;$("log").scrollTop=$("log").scrollHeight}
+function save(){if(account)localStorage.setItem(key(),JSON.stringify(A))}
+function restore(){if(account)try{A=JSON.parse(localStorage.getItem(key())||"{}")}catch{}}
+function txlink(h){return EX+"/tx/"+h}
+function alink(a){return '<a target="_blank" rel="noreferrer" href="'+EX+'/address/'+a+'">'+a+'</a>'}
+
+async function bindAccount(address){
+ if(!window.ethereum)throw Error("Open this page inside Rabby or another injected EVM wallet browser.");
+ provider=new ethers.BrowserProvider(window.ethereum);
+ account=ethers.getAddress(address);
+ signer=await provider.getSigner(account);
+ restore();
+ const n=await provider.getNetwork();
+ $("wallet").innerHTML='<span class="ok">CONNECTED</span><br><b>'+account+'</b><br>Chain ID: '+n.chainId;
+ log("Wallet connected: "+account+" • chain "+n.chainId);
+ await loadBuild();
+ buttons();
+}
+async function connect(){
+ if(!window.ethereum)throw Error("No injected EVM wallet detected.");
+ const existing=await window.ethereum.request({method:"eth_accounts"}).catch(()=>[]);
+ if(existing?.length){await bindAccount(existing[0]);return}
+ const a=await window.ethereum.request({method:"eth_requestAccounts"});
+ if(!a?.length)throw Error("Wallet returned no account.");
+ await bindAccount(a[0]);
+}
+async function alreadyConnected(){
+ if(!window.ethereum)throw Error("No injected EVM wallet detected.");
+ let a=await window.ethereum.request({method:"eth_accounts"});
+ if((!a||!a.length)&&window.ethereum.selectedAddress)a=[window.ethereum.selectedAddress];
+ if(!a?.length)throw Error("Wallet has not exposed an account to this site.");
+ await bindAccount(a[0]);
+}
+async function switchChain(){
+ if(!window.ethereum)throw Error("Open in Rabby / EVM wallet browser.");
+ try{
+   await window.ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:HEX}]});
+ }catch{
+   await window.ethereum.request({method:"wallet_addEthereumChain",params:[{
+     chainId:HEX,chainName:"Robinhood Chain",nativeCurrency:{name:"Ether",symbol:"ETH",decimals:18},
+     rpcUrls:[RPC],blockExplorerUrls:[EX]
+   }]});
+ }
+ await alreadyConnected().catch(connect);
+}
+async function chain(){
+ if(!provider)await alreadyConnected().catch(connect);
+ const n=await provider.getNetwork();
+ if(Number(n.chainId)!==CHAIN)throw Error("Wrong network. Switch to Robinhood Chain mainnet (4663).");
+}
+async function loadBuild(){
+ if(build)return;
+ const r=await fetch("./compiled.json?x="+Date.now(),{cache:"no-store"});
+ if(!r.ok)throw Error("compiled.json not available.");
+ build=await r.json();
+ if(build.reviewedCommit!==COMMIT)throw Error("Frozen build commit mismatch.");
+ const required=["TrollInHoodGenesisV19","TrollEvolutionEngineV19","TrollBoundVaultFactoryV19","TrollAssetRegistryV19","TrollRewardRouterV19","TrollLensV19","TrollAssetSnapshotAnchorV19"];
+ for(const n of required)if(!build.contracts?.[n])throw Error("Missing compiled artifact "+n);
+ log("Frozen V19 build loaded: "+COMMIT);
+}
+function art(n){const a=build?.contracts?.[n];if(!a)throw Error("Missing "+n);return a}
+function c(n,a){return new ethers.Contract(a,art(n).abi,signer)}
+function safeContract(a){return new ethers.Contract(a,SAFE_ABI,signer)}
+
+async function runPreflight(){
+ await chain();await loadBuild();
+ const balance=await provider.getBalance(account);
+ const checks={
+   chain:Number((await provider.getNetwork()).chainId),
+   deployer:account,
+   balanceETH:ethers.formatEther(balance),
+   hasGas:balance>0n,
+   canonicalTrollCode:(await provider.getCode(TROLL))!=="0x",
+   safeFactoryCode:(await provider.getCode(SAFE_FACTORY))!=="0x",
+   safeSingletonCode:(await provider.getCode(SAFE_SINGLETON))!=="0x",
+   safeFallbackCode:(await provider.getCode(SAFE_FALLBACK))!=="0x",
+   frozenCommit:build.reviewedCommit===COMMIT
+ };
+ const ok=checks.chain===CHAIN&&checks.hasGas&&checks.canonicalTrollCode&&checks.safeFactoryCode&&checks.safeSingletonCode&&checks.safeFallbackCode&&checks.frozenCommit;
+ A.preflight=checks;A.preflightOK=ok;save();
+ $("preflight").innerHTML=(ok?'<span class="ok">PASS</span>':'<span class="bad">FAIL</span>')+
+   "<br>"+Object.entries(checks).map(([k,v])=>k+": "+v).join("<br>");
+ if(!ok)throw Error("Preflight failed. Check network, gas balance, or canonical contract code.");
+ log("Mainnet preflight PASS");
+ buttons();
+}
+function validateOwners(){
+ const arr=[$("signer1").value.trim(),$("signer2").value.trim(),$("signer3").value.trim()];
+ if(!arr.every(ethers.isAddress))throw Error("Enter all three valid signer addresses.");
+ const owners=arr.map(ethers.getAddress);
+ if(new Set(owners.map(x=>x.toLowerCase())).size!==3)throw Error("Safe owners must be unique.");
+ return owners;
+}
+async function verifySafeAddress(addr,expectedOwners=null){
+ await chain();
+ if(!ethers.isAddress(addr))throw Error("Invalid Safe address.");
+ addr=ethers.getAddress(addr);
+ if((await provider.getCode(addr))==="0x")throw Error("Safe address has no contract code.");
+ const s=safeContract(addr);
+ const owners=(await s.getOwners()).map(ethers.getAddress);
+ const threshold=Number(await s.getThreshold());
+ if(owners.length!==3||threshold!==2)throw Error("Safe is not 2-of-3.");
+ if(expectedOwners){
+   const a=[...owners].map(x=>x.toLowerCase()).sort();
+   const b=[...expectedOwners].map(x=>x.toLowerCase()).sort();
+   if(JSON.stringify(a)!==JSON.stringify(b))throw Error("Safe owner set does not match configured signers.");
+ }
+ A.safeAddress=addr;A.safeOwners=owners;A.safeThreshold=threshold;save();
+ $("safeState").innerHTML='<span class="ok">SAFE VERIFIED 2-of-3</span><br>'+alink(addr)+"<br>Owners:<br>"+owners.join("<br>");
+ log("Safe verified: "+addr);
+ buttons();
+ return addr;
+}
+async function createSafe(){
+ await chain();
+ if(!A.preflightOK)throw Error("Run and pass preflight first.");
+ if(!$("confirmSafe").checked)throw Error("Confirm the three Safe signer addresses.");
+ const owners=validateOwners();
+ const safeIface=new ethers.Interface(SAFE_ABI);
+ const initializer=safeIface.encodeFunctionData("setup",[owners,2,ethers.ZeroAddress,"0x",SAFE_FALLBACK,ethers.ZeroAddress,0,ethers.ZeroAddress]);
+ const salt=BigInt(Date.now());
+ const f=new ethers.Contract(SAFE_FACTORY,FACTORY_ABI,signer);
+ log("SIGN REAL MAINNET — create Safe 2-of-3");
+ const tx=await f.createProxyWithNonce(SAFE_SINGLETON,initializer,salt);
+ A.safeCreationTx=tx.hash;save();
+ log("Safe creation tx: "+txlink(tx.hash));
+ const receipt=await tx.wait();
+ const fi=new ethers.Interface(FACTORY_ABI);
+ let addr=null;
+ for(const lg of receipt.logs){
+   if(lg.address.toLowerCase()!==SAFE_FACTORY.toLowerCase())continue;
+   try{const p=fi.parseLog(lg);if(p?.name==="ProxyCreation")addr=ethers.getAddress(p.args.proxy)}catch{}
+ }
+ if(!addr)throw Error("Could not parse Safe address from receipt.");
+ await verifySafeAddress(addr,owners);
+}
+async function useExistingSafe(){await verifySafeAddress($("existingSafe").value.trim(),validateOwners())}
+
+async function dep(n,args=[]){
+ if(A[n]&&(await provider.getCode(A[n]))!=="0x"){log("SKIP "+n+" "+A[n]);return A[n]}
+ const f=new ethers.ContractFactory(art(n).abi,art(n).bytecode,signer);
+ log("SIGN REAL MAINNET deploy "+n);
+ const x=await f.deploy(...args);
+ A[n+"Tx"]=x.deploymentTransaction().hash;save();
+ log(n+" tx: "+txlink(A[n+"Tx"]));
+ await x.waitForDeployment();
+ A[n]=await x.getAddress();save();
+ log("✓ "+n+" "+A[n]);
+ return A[n];
+}
+
+async function deployCore(){
+ await chain();await loadBuild();
+ if(!A.preflightOK)throw Error("Preflight must pass.");
+ if(!A.safeAddress)throw Error("Create or verify the production Safe first.");
+ await verifySafeAddress(A.safeAddress,A.safeOwners||validateOwners());
+ if(!$("confirmCore").checked)throw Error("Confirm real mainnet core deployment.");
+
+ const nft=await dep("TrollInHoodGenesisV19",[A.safeAddress,A.safeAddress,ROYALTY_BPS]);
+ const evo=await dep("TrollEvolutionEngineV19",[TROLL,nft,DEAD]);
+ const vf=await dep("TrollBoundVaultFactoryV19",[nft]);
+ const reg=await dep("TrollAssetRegistryV19",[A.safeAddress]);
+ const rr=await dep("TrollRewardRouterV19",[A.safeAddress,vf,reg]);
+ await dep("TrollLensV19",[nft,evo,vf]);
+ await dep("TrollAssetSnapshotAnchorV19",[A.safeAddress]);
+
+ $("deployState").innerHTML='<span class="ok">INERT CORE DEPLOYED</span><br>'+
+ Object.entries(A).filter(([k,v])=>/^Troll/.test(k)&&typeof v==="string"&&ethers.isAddress(v)).map(([k,v])=>k+": "+alink(v)).join("<br>");
+ buttons();
+ await verifyCore();
+}
+async function verifyCore(){
+ await chain();
+ const names=["TrollInHoodGenesisV19","TrollEvolutionEngineV19","TrollBoundVaultFactoryV19","TrollAssetRegistryV19","TrollRewardRouterV19","TrollLensV19","TrollAssetSnapshotAnchorV19"];
+ for(const n of names)if(!A[n]||(await provider.getCode(A[n]))==="0x")throw Error("Missing deployed code: "+n);
+
+ const nft=c("TrollInHoodGenesisV19",A.TrollInHoodGenesisV19);
+ const evo=c("TrollEvolutionEngineV19",A.TrollEvolutionEngineV19);
+ const reg=c("TrollAssetRegistryV19",A.TrollAssetRegistryV19);
+ const rr=c("TrollRewardRouterV19",A.TrollRewardRouterV19);
+ const snap=c("TrollAssetSnapshotAnchorV19",A.TrollAssetSnapshotAnchorV19);
+
+ const checks={
+   safe:A.safeAddress,
+   safeThreshold:Number(await safeContract(A.safeAddress).getThreshold()),
+   genesisOwner:await nft.owner(),
+   totalSupply:(await nft.totalSupply()).toString(),
+   mintController:await nft.mintController(),
+   evolutionEngineConfigured:await nft.evolutionEngine(),
+   metadataRouter:await nft.metadataRouter(),
+   evolutionTroll:await evo.troll(),
+   burnSink:await evo.deadAddress(),
+   registryOwner:await reg.owner(),
+   rewardRouterOwner:await rr.owner(),
+   snapshotOwner:await snap.owner()
+ };
+ const z=ethers.ZeroAddress.toLowerCase(),safe=A.safeAddress.toLowerCase();
+ const ok=
+   checks.safeThreshold===2 &&
+   checks.genesisOwner.toLowerCase()===safe &&
+   checks.totalSupply==="0" &&
+   checks.mintController.toLowerCase()===z &&
+   checks.evolutionEngineConfigured.toLowerCase()===z &&
+   checks.metadataRouter.toLowerCase()===z &&
+   checks.evolutionTroll.toLowerCase()===TROLL.toLowerCase() &&
+   checks.burnSink.toLowerCase()===DEAD.toLowerCase() &&
+   checks.registryOwner.toLowerCase()===safe &&
+   checks.rewardRouterOwner.toLowerCase()===safe &&
+   checks.snapshotOwner.toLowerCase()===safe;
+
+ A.bootstrapVerified=ok;A.verifiedAt=new Date().toISOString();A.verification=checks;save();
+ $("verifyState").innerHTML=(ok?'<span class="ok">BOOTSTRAP VERIFIED — MINT CLOSED</span>':'<span class="bad">VERIFY FAILED</span>')+
+ "<br>"+Object.entries(checks).map(([k,v])=>k+": "+v).join("<br>");
+ if(!ok)throw Error("One or more bootstrap invariants failed.");
+ $("evidence").textContent=JSON.stringify(evidence(),null,2);
+ log("BOOTSTRAP VERIFIED — contracts live, mint closed.");
+ buttons();
+}
+function evidence(){
+ return {
+   schema_version:"1.0.0",stage:"MAINNET_BOOTSTRAP_MINT_CLOSED",chain_id:CHAIN,frozen_commit:COMMIT,
+   deployer:account,
+   safe:{address:A.safeAddress,owners:A.safeOwners,threshold:A.safeThreshold,creation_tx:A.safeCreationTx||null},
+   royalty_bps:ROYALTY_BPS,canonical_troll:TROLL,burn_sink:DEAD,
+   contracts:Object.fromEntries(Object.entries(A).filter(([k,v])=>/^Troll/.test(k)&&!k.endsWith("Tx")&&typeof v==="string"&&ethers.isAddress(v))),
+   deployment_txs:Object.fromEntries(Object.entries(A).filter(([k,v])=>k.endsWith("Tx")&&typeof v==="string")),
+   verification:A.verification||null,verified_at:A.verifiedAt||null,
+   mint_open:false,regulated_paths_enabled:false,metadata_router_deployed:false
+ };
+}
+async function copyEvidence(){
+ const txt=JSON.stringify(evidence(),null,2);
+ await navigator.clipboard.writeText(txt);
+ $("evidence").textContent=txt;
+ log("Deployment evidence copied.");
+}
+function buttons(){
+ const connected=!!account;
+ $("runPreflight").disabled=!connected;
+ $("createSafe").disabled=!(connected&&A.preflightOK);
+ $("verifySafe").disabled=!connected;
+ $("deployCore").disabled=!(connected&&A.preflightOK&&A.safeAddress);
+ $("verifyCore").disabled=!(connected&&A.TrollAssetSnapshotAnchorV19);
+ $("copyEvidence").disabled=!A.bootstrapVerified;
+ if(A.safeAddress)$("safeState").innerHTML='<span class="ok">SAFE READY</span><br>'+alink(A.safeAddress);
+ if(A.bootstrapVerified)$("evidence").textContent=JSON.stringify(evidence(),null,2);
+}
+$("switch").onclick=()=>switchChain().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("connect").onclick=()=>connect().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("resumeWallet").onclick=()=>alreadyConnected().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("runPreflight").onclick=()=>runPreflight().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("createSafe").onclick=()=>createSafe().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("verifySafe").onclick=()=>useExistingSafe().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("deployCore").onclick=()=>deployCore().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("verifyCore").onclick=()=>verifyCore().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+$("copyEvidence").onclick=()=>copyEvidence().catch(e=>log("ERROR "+(e.shortMessage||e.message)));
+for(const id of ["signer1","signer2","signer3","confirmSafe","confirmCore","existingSafe"])$(id).oninput=buttons;
+if(window.ethereum?.on){
+ window.ethereum.on("accountsChanged",a=>{if(a?.length)bindAccount(a[0]).catch(e=>log("ACCOUNT EVENT ERROR "+e.message))});
+ window.ethereum.on("chainChanged",()=>{if(account)alreadyConnected().catch(()=>{})});
+}
+</script>
+</body>
+</html>
