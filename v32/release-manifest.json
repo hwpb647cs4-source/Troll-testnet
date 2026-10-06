@@ -38,7 +38,10 @@
     "PRODUCTION_MULTISIG": {
       "status": "OPEN",
       "evidence": "production/multisig/safe-preflight.json",
-      "note": "2-of-3 signer set configured by owner. Safe contract creation and on-chain owner/threshold read-back remain required."
+      "signer_configuration_status": "SUPERSEDED_AWAITING_THREE_REPLACEMENT_PUBLIC_ADDRESSES",
+      "threshold": 2,
+      "owner_count": 3,
+      "note": "The owner requested replacement of the proposed signer set. Existing signer configuration and prepared Safe creation inputs are not approved for execution. Await three new project-only public addresses; then reconcile all active configuration files and regenerate creation inputs before any wallet confirmation. Safe creation and on-chain verification remain pending. This entry is a deployment hold, not an on-chain owner change or a claim that repository history has been erased."
     },
     "PRODUCTION_METADATA_CIDS": {
       "status": "OPEN"
@@ -62,7 +65,7 @@
     "EXPLICIT_MAINNET_AUTHORIZATION": {
       "status": "PASS",
       "evidence": "production/release/launch-authorization-2026-09-28.json",
-      "note": "Owner explicitly authorized a mainnet launch on the evening of 2026-09-28, but broadcast remains conditional on every other non-waived release gate passing."
+      "note": "Historical authorization applied only to the evening of 2026-09-28 and was conditional on every other release gate passing. It does not authorize a later launch or execution with replacement signers. Renew authorization for the exact regenerated deployment inputs before any broadcast."
     }
   }
 }
