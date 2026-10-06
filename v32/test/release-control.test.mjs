@@ -6,13 +6,14 @@ const r=evaluateRelease(m.gates);
 
 assert.equal(r.ready,false);
 assert.equal(r.summary.total,REQUIRED_GATES.length);
-assert.ok(r.summary.pass>=8);
+assert.ok(r.summary.pass>=7);
 assert.equal(r.summary.waived,1);
 assert.equal(r.summary.notApplicable,1);
 assert.equal(r.rows.find(x=>x.id==="INDEPENDENT_HUMAN_AUDIT").status,"WAIVED_BY_OWNER");
 assert.ok(!r.blocking.some(x=>x.id==="INDEPENDENT_HUMAN_AUDIT"));
 assert.ok(!r.blocking.some(x=>x.id==="REGULATED_SETTLEMENT_APPROVED"));
-assert.equal(r.rows.find(x=>x.id==="EXPLICIT_MAINNET_AUTHORIZATION").status,"PASS");
+assert.equal(r.rows.find(x=>x.id==="EXPLICIT_MAINNET_AUTHORIZATION").status,"OPEN");
+assert.ok(r.blocking.some(x=>x.id==="EXPLICIT_MAINNET_AUTHORIZATION"));
 assert.ok(r.blocking.some(x=>x.id==="PRODUCTION_MULTISIG"));
 assert.ok(r.blocking.some(x=>x.id==="PRODUCTION_METADATA_CIDS"));
 assert.ok(r.blocking.some(x=>x.id==="DEDICATED_PRODUCTION_RPC"));
