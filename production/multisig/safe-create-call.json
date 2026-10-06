@@ -1,20 +1,15 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "chain_id": 4663,
   "network": "Robinhood Chain",
   "factory": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
   "singleton": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
   "fallback_handler": "0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99",
-  "owners": [
-    "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
-    "0xdc2f1175f73e474f673717bc91583865cb3db074",
-    "0xaaa6a3c51a7fcca64348951cadda1f671144b64c"
-  ],
+  "owner_count": 3,
   "threshold": 2,
-  "salt_nonce": "202609282250",
-  "initializer": "0xb63e800d0000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000180000000000000000000000000fd0732dc9e303f09fcef3a7388ad10a83459ec990000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003000000000000000000000000745b9b869900b2d8c2742dd9361cba88eb133c15000000000000000000000000dc2f1175f73e474f673717bc91583865cb3db074000000000000000000000000aaa6a3c51a7fcca64348951cadda1f671144b64c0000000000000000000000000000000000000000000000000000000000000000",
-  "factory_method": "createProxyWithNonce(address,bytes,uint256)",
-  "status": "READY_FOR_USER_SIGNED_MAINNET_TRANSACTION",
+  "factory_method": "createChainSpecificProxyWithNonce(address,bytes,uint256)",
+  "status": "SUPERSEDED_PUBLIC_PAYLOAD_PRIVATE_REPLACEMENT_PREPARED_OFFREPO",
   "broadcast": false,
-  "note": "Safe creation requires one real Robinhood Chain mainnet transaction signed by a funded wallet. After confirmation, read back owners and threshold before closing the production multisig gate."
+  "executable_payload_present": false,
+  "note": "The previous public Safe creation payload is superseded and must not be signed. Replacement owners are confirmed privately and are intentionally not published here before deployment. Generate/review the exact private chain-specific payload outside the public repository."
 }

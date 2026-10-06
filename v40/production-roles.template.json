@@ -1,6 +1,6 @@
 {
   "schema_version": "40.0.0",
-  "status": "SIGNERS_CONFIGURED_SAFE_PENDING",
+  "status": "PRIVATE_REPLACEMENT_SIGNERS_CONFIRMED_SAFE_PENDING",
   "chain_id": 4663,
   "roles": {
     "DEPLOYER": {
@@ -14,12 +14,9 @@
       "status": "OPEN",
       "type": "MULTISIG",
       "threshold": 2,
-      "signers": [
-        "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
-        "0xdc2f1175f73e474f673717bc91583865cb3db074",
-        "0xaaa6a3c51a7fcca64348951cadda1f671144b64c"
-      ],
-      "evidence_ref": "production/multisig/safe-preflight.json"
+      "evidence_ref": "production/multisig/safe-preflight.json",
+      "signer_count": 3,
+      "signers_publication": "WITHHELD_PREDEPLOYMENT"
     },
     "MINT_CONTROLLER": {
       "address": "REPLACE_WITH_MINT_CONTROLLER",
