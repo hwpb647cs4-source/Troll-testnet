@@ -1,40 +1,39 @@
-# Production Safe creation call — ready
+# Production Safe creation call — PRIVACY HOLD
 
 Target network: Robinhood Chain mainnet, chain ID **4663**.
 
-The owner-confirmed signer set is:
+## Current state
 
-1. `0x745B9B869900B2D8c2742DD9361Cba88EB133c15`
-2. `0xdc2f1175f73e474f673717bc91583865cb3db074`
-3. `0xaaa6a3c51a7fcca64348951cadda1f671144b64c`
+The previously published signer set and Safe creation payload are **SUPERSEDED — DO NOT SIGN**.
 
-Threshold: **2 of 3**.
+A replacement set of three project-only signer wallets has been confirmed privately by the owner:
+- owner count: **3**
+- threshold: **2 of 3**
+- independent recovery phrases: owner-confirmed
+- public addresses intentionally withheld from this repository before deployment
 
-Canonical Safe v1.4.1 components:
+The private preparation uses Safe v1.4.1 and the chain-specific factory method:
+
+`createChainSpecificProxyWithNonce(address,bytes,uint256)`
+
+This includes the chain ID in the CREATE2 salt and avoids replaying the same Safe creation to the same address on another network.
+
+## Public canonical components
+
 - SafeProxyFactory: `0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67`
 - SafeL2 singleton: `0x29fcB43b46531BcA003ddC8FCB67FFE91900C762`
 - CompatibilityFallbackHandler: `0xfd0732Dc9E303f09fCEf3a7388Ad10A83459Ec99`
 
-Prepared factory call:
-- method: `createProxyWithNonce(address,bytes,uint256)`
-- singleton: see JSON
-- initializer: see JSON
-- salt nonce: `202609282250`
+## Execution rule
 
-This repository does not contain or request any private key.
+No executable replacement payload is stored in the public repository before deployment.
 
-## Before signing
+Before any signature:
+1. privately review the three exact owners;
+2. confirm threshold 2;
+3. confirm chain ID 4663;
+4. simulate/static-call the exact factory calldata;
+5. review predicted Safe address and gas;
+6. renew explicit mainnet authorization for those exact inputs.
 
-The transaction-sending wallet must:
-- be on Robinhood Chain mainnet (4663);
-- hold enough ETH for gas;
-- verify the factory address exactly.
-
-## After signing
-
-Record the transaction hash, then verify on-chain:
-- Safe contract code exists;
-- owners match the three addresses above;
-- threshold equals 2.
-
-Only then can `PRODUCTION_MULTISIG` advance to PASS.
+After deployment, read back owners and threshold on-chain before closing `PRODUCTION_MULTISIG`.
