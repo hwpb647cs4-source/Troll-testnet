@@ -29,13 +29,10 @@
     "target": "SAFE_2_OF_3",
     "preflight": "production/multisig/safe-preflight.json",
     "safe_address": null,
-    "status": "SIGNERS_CONFIGURED_SAFE_CREATION_PENDING",
-    "signers": [
-      "0x745B9B869900B2D8c2742DD9361Cba88EB133c15",
-      "0xdc2f1175f73e474f673717bc91583865cb3db074",
-      "0xaaa6a3c51a7fcca64348951cadda1f671144b64c"
-    ],
-    "threshold": 2
+    "status": "PRIVATE_REPLACEMENT_SIGNERS_CONFIRMED_SAFE_CREATION_PENDING",
+    "owner_count": 3,
+    "threshold": 2,
+    "signers_publication": "WITHHELD_PREDEPLOYMENT"
   },
   "rpc": {
     "status": "PRIVATE_ENDPOINT_REQUIRED",
@@ -48,15 +45,15 @@
   },
   "mainnet": {
     "broadcast": false,
-    "authorization": "AUTHORIZED_CONDITIONAL_2026_09_28_EVENING",
-    "authorization_evidence": "production/release/launch-authorization-2026-09-28.json",
-    "explicit_authorization_required": false
+    "authorization": "RENEWAL_REQUIRED_AFTER_PRIVATE_SIMULATION",
+    "explicit_authorization_required": true
   },
   "blockers": [
     "PRODUCTION_MULTISIG",
     "PRODUCTION_METADATA_CIDS",
     "DEDICATED_PRODUCTION_RPC",
-    "FINAL_DEPLOYMENT_REHEARSAL"
+    "FINAL_DEPLOYMENT_REHEARSAL",
+    "EXPLICIT_MAINNET_AUTHORIZATION"
   ],
   "risk_waivers": {
     "independent_human_audit": {
